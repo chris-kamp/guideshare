@@ -1,12 +1,8 @@
 <div class="container">
   <h1 class="mb-5">Guides</h1>
-  <% @guides.each_with_index do |guide, index| %>
-    <% if (index % 3 == 0) %>
-      <div class="row mb-5">
+  <div class="d-flex flex-wrap">
+    <% @guides.each_with_index do |guide, index| %>
+      <%= render partial: "card", locals: {guide: guide} %>
     <% end %>
-    <div class="col"><%= render partial: "card", locals: {guide: guide} %></div>
-    <% if ((index + 1) % 3 == 0) %>
-      </div>
-    <% end %>
-  <% end %>
+  </div>
 </div>
