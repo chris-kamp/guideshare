@@ -8,6 +8,7 @@ class Guide < ApplicationRecord
               maximum: 120,
             }
   validates :description, length: { maximum: 1200 }
+  has_one_attached :guide_file
 
   # Returns the guide's description if not empty, or else "no description provided"
   def description_text

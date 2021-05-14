@@ -64,3 +64,8 @@ gem 'bootstrap', '~> 5.0.0'
 gem "jquery-rails", "~> 4.4"
 
 gem "simple_form", "~> 5.1"
+
+gem "cloudinary", "~> 1.20"
+gem "activestorage-cloudinary-service", "~> 0.2.3"
+
+gem "active_storage_validations", "~> 0.9.3"

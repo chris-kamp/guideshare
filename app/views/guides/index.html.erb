@@ -1,5 +1,7 @@
 <div class="container">
   <h1 class="mb-5">Guides</h1>
+  <p><%= link_to "New guide", new_guide_path %></p>
+
   <div class="d-flex flex-wrap">
     <% @guides.each_with_index do |guide, index| %>
       <%= render partial: "card", locals: {guide: guide} %>

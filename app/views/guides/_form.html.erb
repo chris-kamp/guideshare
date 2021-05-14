@@ -1,5 +1,8 @@
   <%# Form created using simple form gem with bootstrap styles integration. %>
-  <%= simple_form_for @guide, wrapper: :horizontal_form do |f| %>
+  <%# Maps non-text fields to relevant bootstrap classes with wrapper_mappings. %>
+  <%= simple_form_for @guide, wrapper: :horizontal_form, wrapper_mappings: {
+    file: :horizontal_file
+  } do |f| %>
     <%= f.error_notification %>
   
     <div class="form-inputs">
@@ -8,6 +11,7 @@
                   required: true,
                   autofocus: true, wrapper_html: {class: "mt-5 mb-5"} %>
       <%= f.input :description, wrapper_html: {class: "mb-5"} %>
+      <%= f.input :guide_file, wrapper_html: {class: "mb-5"} %>
     </div>
   
     <div class="form-actions">
