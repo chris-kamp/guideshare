@@ -1,2 +1,10 @@
-<h1>Guides#show</h1>
-<p>Find me in app/views/guides/show.html.erb</p>
+<div class="container">
+  <h1><%= @guide.title %></h1>
+  <hr>
+  <p><%= @guide.description_text %></p>
+  <p>
+    <%= link_to "Edit", edit_guide_path(@guide) %>|
+    <%= link_to "Delete", guide_path(@guide), method: :delete %>
+  </p>
+  <p><%= link_to "Back to guides", guides_path %></p>
+</div>
