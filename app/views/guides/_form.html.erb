@@ -1,0 +1,16 @@
+  <%# Form created using simple form gem with bootstrap styles integration. %>
+  <%= simple_form_for @guide, wrapper: :horizontal_form do |f| %>
+    <%= f.error_notification %>
+  
+    <div class="form-inputs">
+      <%# Simple form automatically determines input type based on the specified attribute, and generates label and input field. %>
+      <%= f.input :title,
+                  required: true,
+                  autofocus: true, wrapper_html: {class: "mt-5 mb-5"} %>
+      <%= f.input :description, wrapper_html: {class: "mb-5"} %>
+    </div>
+  
+    <div class="form-actions">
+      <%= f.button :submit, class: "btn-primary"%>
+    </div>
+  <% end %>
