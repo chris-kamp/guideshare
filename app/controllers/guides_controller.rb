@@ -1,13 +1,16 @@
 class GuidesController < ApplicationController
   before_action :authenticate_user!, only: %i[new create edit update destroy]
   before_action :set_guide, only: %i[show edit update destroy]
+
   def index
+    # Retrieve all guides for display
     @guides = Guide.all
   end
 
   def show; end
 
   def new
+    # Create an empty guide object to extract attributes for new guide form
     @guide = Guide.new
   end
 
@@ -38,16 +41,19 @@ class GuidesController < ApplicationController
   end
 
   def destroy
+    # Delete guide and redirect to index with success notice
     @guide.destroy
     redirect_to guides_url, notice: "Guide was successfully destroyed."
   end
 
   private
 
+  # Retrieve a guide based on id restful parameter
   def set_guide
     @guide = Guide.find(params[:id])
   end
 
+  # Get guide attributes from params hash with strong parameters
   def guide_params
     params.require(:guide).permit(:title, :description)
   end
