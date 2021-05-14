@@ -1,5 +1,7 @@
 class Guide < ApplicationRecord
   belongs_to :user
+  has_one_attached :guide_file
+
   validates :title,
             presence: true,
             uniqueness: true,
@@ -8,7 +10,18 @@ class Guide < ApplicationRecord
               maximum: 120,
             }
   validates :description, length: { maximum: 1200 }
-  has_one_attached :guide_file
+
+  # Use active_storage_validations gem to validate attachments. Guide file must be a PDF < 2mb.
+  validates :guide_file,
+            attached: true,
+            content_type: {
+              in: 'application/pdf',
+              message: 'must be a PDF file',
+            },
+            size: {
+              less_than: 2.megabytes,
+              message: 'must be less than 2 megabytes in size',
+            }
 
   # Returns the guide's description if not empty, or else "no description provided"
   def description_text
