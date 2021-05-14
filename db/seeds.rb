@@ -34,7 +34,7 @@ devtester =
 # To avoid excessive Cloudinary requests during testing, load one attachment and replicate for other seeded guides.
 guide_attachment =
   URI.open(
-    ENV['SAMPLE_PDF_FILE'],
+    ENV['SAMPLE_PDF_FILE_LONG'],
   )
 
 guide_template =

@@ -1,6 +1,7 @@
 class GuidesController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create edit update destroy]
-  before_action :set_guide, only: %i[show edit update destroy]
+  before_action :authenticate_user!,
+                only: %i[new create edit update destroy view]
+  before_action :set_guide, only: %i[show edit update destroy view]
 
   def index
     # Retrieve all guides for display
@@ -8,6 +9,10 @@ class GuidesController < ApplicationController
   end
 
   def show; end
+
+  def view
+    @page_count = Cloudinary::Api.resource(@guide.guide_file.key, :pages => true)['pages'].to_i
+  end
 
   def new
     # Create an empty guide object to extract attributes for new guide form
@@ -18,6 +23,7 @@ class GuidesController < ApplicationController
     # Create a new guide using strong params from form data, then assign it to the current user
     @guide = Guide.new(guide_params)
     @guide.user = current_user
+
     # Redirect and notify success, or re-render "new" page with error messages if creation fails
     if @guide.save
       redirect_to @guide,
@@ -43,7 +49,7 @@ class GuidesController < ApplicationController
   def destroy
     # Delete guide and redirect to index with success notice
     @guide.destroy
-    redirect_to guides_url, notice: "Guide was successfully destroyed."
+    redirect_to guides_url, notice: 'Guide was successfully destroyed.'
   end
 
   private
