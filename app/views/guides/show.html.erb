@@ -4,7 +4,7 @@
   <p><%= @guide.description_text %></p>
   <p>
     <%= link_to "Edit", edit_guide_path(@guide) %>|
-    <%= link_to "Delete", guide_path(@guide), method: :delete %>
+    <%= link_to "Delete", guide_path(@guide), method: :delete, data: {confirm: "Are you sure?"} %>
   </p>
   <p><%= link_to "Back to guides", guides_path %></p>
 </div>
