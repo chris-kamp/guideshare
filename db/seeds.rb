@@ -40,7 +40,7 @@ user.guides.create(
 admin.guides.create(
   [
     { title: 'Another guide', description: "This one's by the admin" },
-    { title: 'Another admin guide without a description' },
+    { title: 'Another admin guide with a long description', description: "This is a long description to see what that looks like. Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, quam assumenda temporibus possimus repudiandae fuga corrupti corporis quod non voluptatibus, error odit necessitatibus magnam itaque rem voluptates fugit nesciunt? Doloribus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, quam assumenda temporibus possimus repudiandae fuga corrupti corporis quod non voluptatibus, error odit necessitatibus magnam itaque rem voluptates fugit nesciunt? Doloribus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, quam assumenda temporibus possimus repudiandae fuga corrupti corporis quod non voluptatibus, error odit necessitatibus magnam itaque rem voluptates fugit nesciunt? Doloribus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, quam assumenda temporibus possimus repudiandae fuga corrupti corporis quod non voluptatibus, error odit necessitatibus magnam itaque rem voluptates fugit nesciunt? Doloribus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, quam assumenda temporibus possimus repudiandae fuga corrupti corporis quod non voluptatibus." },
   ],
 )
 devtester.guides.create(
