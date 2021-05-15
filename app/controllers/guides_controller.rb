@@ -10,7 +10,10 @@ class GuidesController < ApplicationController
 
   def show; end
 
-  def view; end
+  def view
+    # Get number of pages in guide file for display
+    @page_count = @guide.get_page_count
+  end
 
   def new
     # Create an empty guide object to extract attributes for new guide form
