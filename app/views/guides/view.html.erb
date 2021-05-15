@@ -1,7 +1,8 @@
 <div class="container">
   <h1><%= @guide.title %></h1>
   <hr>
-  <% for page_num in (1..@page_count) do %>
+  <%# For each page in the attached file, retrieve an image of that page %>
+  <% for page_num in (1..@guide.get_page_count) do %>
     <p>
       <%= cl_image_tag "#{@guide.guide_file.key}.png", cloud_name: "chriskamp", page: page_num %>
     </p>

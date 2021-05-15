@@ -10,9 +10,7 @@ class GuidesController < ApplicationController
 
   def show; end
 
-  def view
-    @page_count = Cloudinary::Api.resource(@guide.guide_file.key, :pages => true)['pages'].to_i
-  end
+  def view; end
 
   def new
     # Create an empty guide object to extract attributes for new guide form
@@ -20,9 +18,8 @@ class GuidesController < ApplicationController
   end
 
   def create
-    # Create a new guide using strong params from form data, then assign it to the current user
-    @guide = Guide.new(guide_params)
-    @guide.user = current_user
+    # Create a new guide using strong params from form data, assigned to current user
+    @guide = current_user.guides.new(guide_params)
 
     # Redirect and notify success, or re-render "new" page with error messages if creation fails
     if @guide.save

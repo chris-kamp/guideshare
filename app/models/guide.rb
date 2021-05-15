@@ -33,4 +33,11 @@ class Guide < ApplicationRecord
       end
     )
   end
+
+  # Get the number of pages in the attached PDF via a Cloudinary Admin API call.
+  # Note page count is only accessible after file uploaded to Cloudinary, so can't be
+  # set and stored in database using a callback on creation/update of guide object.
+  def get_page_count
+    Cloudinary::Api.resource(guide_file.key, :pages => true)['pages'].to_i
+  end
 end
