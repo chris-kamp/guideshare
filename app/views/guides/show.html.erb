@@ -3,6 +3,7 @@
   <hr>
   <p><%= @guide.description_text %></p>
   <p>
+    <%= link_to "View", view_guide_path(@guide) %>|
     <%= link_to "Edit", edit_guide_path(@guide) %>|
     <%= link_to "Delete", guide_path(@guide), method: :delete, data: {confirm: "Are you sure?"} %>
   </p>
