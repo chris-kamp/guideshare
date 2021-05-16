@@ -44,7 +44,7 @@ class Guide < ApplicationRecord
   end
 
   # Returns true if the passed user owns a copy of the guide
-  def owned_by(owner)
+  def owned_by?(owner)
     return owners.exists?(owner.id)
   end
 end

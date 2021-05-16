@@ -56,15 +56,13 @@ class GuidesController < ApplicationController
 
   # Add a guide to the current user's owned guides
   def purchase
-    # Attempting to purchase a guide that is already owned will raise a validation error in OwnedGuides.
-    # If that occurs, rescue the error and display a purchase failed message.
-    begin
+    # Notify failure if user already owns the guide. Otherwise, add to owned guides and notify success.
+    if @guide.owned_by?(current_user)
+      redirect_to @guide, alert: "Purchase failed: you already own this guide."
+    else
       current_user.owned_guides.push(@guide)
-    rescue ActiveRecord::RecordInvalid => e
-      redirect_to @guide, alert: e.message.sub("Validation", "Purchase")
-      return
+      redirect_to @guide, notice: "Guide \"#{@guide.title}\" was successfully purchased."
     end
-    redirect_to @guide, notice: "Guide \"#{@guide.title}\" was successfully purchased."
   end
 
   private
