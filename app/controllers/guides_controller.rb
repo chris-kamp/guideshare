@@ -121,6 +121,6 @@ class GuidesController < ApplicationController
 
   # Get guide attributes from params hash with strong parameters
   def guide_params
-    params.require(:guide).permit(:title, :description, :guide_file)
+    params.require(:guide).permit(:title, :description, :price, :guide_file)
   end
 end

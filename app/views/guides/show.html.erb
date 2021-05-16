@@ -4,7 +4,9 @@
 <div class="container">
   <h1><%= @guide.title %></h1>
   <% if user_signed_in? && @guide.owned_by?(current_user) %>
-    <span class="text-muted">Owned.</span>
+    <span class="text-muted">Owned</span>
+  <% else %>
+    <span class="text-muted"><%= @guide.price == 0.0 ? "Free" : number_to_currency(@guide.price, locale: :en) %></span>
   <% end %>
   <hr>
   <p><%= @guide.description_text %></p>

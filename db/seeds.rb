@@ -45,16 +45,12 @@ guide_template =
       io: guide_attachment,
       filename: 'lorem.pdf',
     },
+    price: 1.5
   )
 
 # Seed guides for each user
 user.guides.create(
   [
-    {
-      title: "User's first guide",
-      description: 'The very first guide',
-      guide_file: guide_template.guide_file.blob,
-    },
     {
       title: 'Guide with no description',
       guide_file: guide_template.guide_file.blob,
