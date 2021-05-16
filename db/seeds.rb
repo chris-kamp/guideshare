@@ -59,6 +59,7 @@ user.guides.create(
       title: 'Guide 3',
       description: 'This is the description',
       guide_file: guide_template.guide_file.blob,
+      price: 0
     },
   ],
 )
@@ -68,6 +69,7 @@ admin.guides.create(
       title: 'Another guide',
       description: "This one's by the admin",
       guide_file: guide_template.guide_file.blob,
+      price: 5.5
     },
     {
       title: 'Another admin guide with a long description',
@@ -83,12 +85,14 @@ devtester.guides.create(
       title: 'Definitely a guide',
       description: "Pretty sure it's a guide",
       guide_file: guide_template.guide_file.blob,
+      price: 25
     },
     {
       title:
         "This is a guide with a very long title that is the max length 120 characters long, almost, but doesn't quite get there",
       description: 'This is a short description of a guide with a long title',
       guide_file: guide_template.guide_file.blob,
+      price: 9.95
     },
     {
       title: 'Running out of titles',

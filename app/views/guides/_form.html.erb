@@ -11,7 +11,7 @@
                   required: true,
                   autofocus: true, wrapper_html: {class: "mt-5 mb-5"} %>
       <%= f.input :description, wrapper_html: {class: "mb-5"} %>
-      <%= f.input :price, wrapper_html: {class: "mb-5"} %>
+      <%= f.input :price, wrapper_html: {class: "mb-5"}, input_html: {step: 0.01} %>
       <%= f.input :guide_file, wrapper_html: {class: "mb-5"} %>
     </div>
   

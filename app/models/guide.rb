@@ -12,6 +12,7 @@ class Guide < ApplicationRecord
               maximum: 120,
             }
   validates :description, length: { maximum: 1200 }
+  validates :price, presence: true, numericality: { greater_than_or_equal_to: 0, less_than: 100 }
 
   # Use active_storage_validations gem to validate attachments. Guide file must be a PDF < 2mb.
   validates :guide_file,
