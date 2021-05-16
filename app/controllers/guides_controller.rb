@@ -1,15 +1,17 @@
 class GuidesController < ApplicationController
   before_action :authenticate_user!,
-                only: %i[new create edit update destroy view]
-  before_action :set_guide, only: %i[show edit update destroy view]
+                only: %i[new create edit update destroy view purchase]
+  before_action :set_guide, only: %i[show edit update destroy view purchase]
 
   def index
     # Retrieve all guides for display
     @guides = Guide.all
   end
 
+  # Show the details of a guide (but not the file containing guide contents)
   def show; end
 
+  # View the content of a guide
   def view
     # Get number of pages in guide file for display
     @page_count = @guide.get_page_count
@@ -50,6 +52,19 @@ class GuidesController < ApplicationController
     # Delete guide and redirect to index with success notice
     @guide.destroy
     redirect_to guides_url, notice: 'Guide was successfully destroyed.'
+  end
+
+  # Add a guide to the current user's owned guides
+  def purchase
+    # Attempting to purchase a guide that is already owned will raise a validation error in OwnedGuides.
+    # If that occurs, rescue the error and display a purchase failed message.
+    begin
+      current_user.owned_guides.push(@guide)
+    rescue ActiveRecord::RecordInvalid => e
+      redirect_to @guide, alert: e.message.sub("Validation", "Purchase")
+      return
+    end
+    redirect_to @guide, notice: "Guide \"#{@guide.title}\" was successfully purchased."
   end
 
   private
