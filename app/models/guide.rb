@@ -2,7 +2,7 @@ class Guide < ApplicationRecord
   belongs_to :user
   has_one_attached :guide_file
   has_many :user_guides, dependent: :destroy
-  has_many :owners, class_name: "User", through: :user_guides
+  has_many :owners, through: :user_guides, source: :user
 
   validates :title,
             presence: true,
@@ -41,5 +41,10 @@ class Guide < ApplicationRecord
   # set and stored in database using a callback on creation/update of guide object.
   def get_page_count
     Cloudinary::Api.resource(guide_file.key, :pages => true)['pages'].to_i
+  end
+
+  # Returns true if the passed user owns a copy of the guide
+  def owned_by(owner)
+    return owners.exists?(owner.id)
   end
 end
