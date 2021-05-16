@@ -65,6 +65,10 @@ class GuidesController < ApplicationController
     end
   end
 
+  def owned
+    @guides = current_user.owned_guides
+  end
+
   private
 
   # Retrieve a guide based on id restful parameter

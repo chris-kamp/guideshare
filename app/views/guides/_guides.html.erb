@@ -1,0 +1,5 @@
+  <div class="d-flex flex-wrap">
+    <% @guides.each do |guide| %>
+      <%= render partial: "card", locals: {guide: guide} %>
+    <% end %>
+  </div>
