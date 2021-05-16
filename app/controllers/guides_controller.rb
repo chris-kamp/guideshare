@@ -1,7 +1,8 @@
 class GuidesController < ApplicationController
   before_action :authenticate_user!,
                 only: %i[new create edit update destroy view purchase owned]
-  before_action :set_guide, only: %i[show edit update destroy view purchase]
+  before_action :set_guide, only: %i[show edit update destroy view purchase buy]
+  skip_before_action :verify_authenticity_token, only: [:buy]
 
   def index
     # Retrieve all guides for display
@@ -63,6 +64,38 @@ class GuidesController < ApplicationController
       current_user.owned_guides.push(@guide)
       redirect_to @guide, notice: "Guide \"#{@guide.title}\" was successfully purchased."
     end
+  end
+
+  def buy
+    Stripe.api_key = ENV['STRIPE_API_KEY']
+    session = Stripe::Checkout::Session.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: 'aud',
+          product_data: {
+            name: @guide.title,
+          },
+          unit_amount: 500,
+        },
+        quantity: 1,
+      }],
+      mode: 'payment',
+      # These placeholder URLs will be replaced in a following step.
+      success_url: request.base_url + '/guides/purchase-success',
+      cancel_url: request.base_url + '/guides/purchase-cancel',
+    })
+
+    render json: session
+  end
+
+  def success
+    render plain: "Successful purchase"
+
+  end
+
+  def cancel
+    render plain: "Canceled transaction"
   end
 
   def owned
