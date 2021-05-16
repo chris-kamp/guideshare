@@ -1,6 +1,8 @@
 class Guide < ApplicationRecord
   belongs_to :user
   has_one_attached :guide_file
+  has_many :user_guides, dependent: :destroy
+  has_many :owners, class_name: "User", through: :user_guides
 
   validates :title,
             presence: true,
