@@ -1,6 +1,6 @@
 class GuidesController < ApplicationController
   before_action :authenticate_user!,
-                only: %i[new create edit update destroy view purchase]
+                only: %i[new create edit update destroy view purchase owned]
   before_action :set_guide, only: %i[show edit update destroy view purchase]
 
   def index
