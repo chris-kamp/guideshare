@@ -71,3 +71,7 @@ gem "activestorage-cloudinary-service", "~> 0.2.3"
 gem "active_storage_validations", "~> 0.9.3"
 
 gem "stripe", "~> 5.32"
+
+gem "rolify", "~> 6.0"
+
+gem "pundit", "~> 2.1"
