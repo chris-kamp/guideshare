@@ -17,13 +17,14 @@ class GuidesController < ApplicationController
   end
 
   # GET /guides/:id
-  # Show the details of a guide (but not the file containing guide contents)
+  # Shows a guide listing (but not file content)
   def show
+    # If user not authorised, redirect to show page and alert error.
     authorize_guide(@guide, "Guide does not exist or you are not authorised to view it", guides_path)
   end
 
   # GET/guides/:id/view
-  # View the content of a guide
+  # View the content of a guide file
   def view
     authorize_guide(@guide, "You must purchase this guide in order to view it")
     # Get number of pages in guide file for display. Makes a Cloudinary API call.
@@ -52,28 +53,29 @@ class GuidesController < ApplicationController
 
   # GET /guides/:id/edit
   def edit
-    # If user not authorised, redirect to show page and alert error
     authorize_guide(@guide, "Only the author may edit this guide")
   end
 
   # PUT/PATCH /guides/:id
   def update
-    # If user not authorised, redirect to show page and alert error
-    authorize_guide(@guide, "Only the author may edit this guide")
-    # Update a guide using strong params from form data.
-    # # Redirect and notify if successful, or re-render "edit" page with error messages if update fails.
+    # To prevent multiple redirect/render error, return if authorisation fails.
+    return unless authorize_guide(@guide, "Only the author may edit this guide")
+
+    # Attempt to update a guide using strong params from form data.
     if @guide.update(guide_params)
+      # Redirect and notify if update successful
       redirect_to @guide,
                   notice: "Guide \"#{@guide.title}\" was successfully updated."
     else
+      # Re-render "edit" page with error messages if update fails.
       render :edit, status: :unprocessable_entity
     end
   end
 
   # DELETE /guides/:id
   def destroy
-    # If user not authorised, redirect to show page and alert error
-    authorize_guide(@guide, "Only the author may delete this guide")
+    return unless authorize_guide(@guide, "Only the author may delete this guide")
+
     # Allow guide to be deleted only if no users have purchased it.
     if !@guide.has_owners?
       @guide.destroy
@@ -85,7 +87,8 @@ class GuidesController < ApplicationController
 
   # GET /guides/:id/archive
   def archive
-    authorize_guide(@guide, "Only the author may archive this guide")
+    return unless authorize_guide(@guide, "Only the author may archive this guide")
+
     # Archive guide by "soft deleting" using "discard" gem. 
     # Only the author and users who have already purchased the guide will be able to access it.
     @guide.discard
