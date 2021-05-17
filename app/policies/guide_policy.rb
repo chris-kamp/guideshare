@@ -8,9 +8,9 @@ class GuidePolicy < ApplicationPolicy
     record.kept? || (user && user.owns?(record))
   end
 
-  # User must be signed in and own a guide to view it
+  # User must be signed in and own a guide (or be its author) to view it
   def view?
-    user && user.owns?(record)
+    user && (user.owns?(record) || user.author?(record))
   end
 
   def new?
@@ -31,21 +31,5 @@ class GuidePolicy < ApplicationPolicy
 
   def destroy?
     user && user.author?(record)
-  end
-
-  def purchase?
-    true
-  end
-
-  def success?
-    true
-  end
-
-  def cancel?
-    true
-  end
-
-  def owned?
-    true
   end
 end

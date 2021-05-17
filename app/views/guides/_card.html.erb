@@ -1,11 +1,12 @@
 <div class="card mb-3 me-3" style="width: 18rem;">
   <div class="card-body">
-    <h5 class="card-title"><%= link_to guide.title, guide %></h5>
+    <h4 class="card-title"><%= link_to guide.title, guide %></h4>
     <% if user_signed_in? && guide.owned_by?(current_user) %>
-      <h6 class="card-subtitle mb-2 text-muted">Owned</h6>
+      <h5 class="card-subtitle mb-2 text-muted">Owned</h5>
     <% else %>
-      <h6 class="card-subtitle mb-2 text-muted"><%= guide.price == 0.0 ? "Free" : number_to_currency(guide.price, locale: :en) %></h6>
+      <h5 class="card-subtitle mb-2 text-muted"><%= guide.price == 0.0 ? "Free" : number_to_currency(guide.price, locale: :en) %></h5>
     <% end %>
+    <h6 class="card-subtitle mb-2 text-muted">Created by: <%= guide.user.username %><%= " (you)" if current_user.author?(guide) %></h6>
     <p class="card-text"><%= guide.description_text %></p>
     <% if policy(guide).view? %>
       <%= link_to "View", view_guide_path(guide), class: "card-link" %>
