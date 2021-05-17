@@ -6,8 +6,8 @@ class GuidesController < ApplicationController
 
   # GET /guides
   def index
-    # Retrieve all guides for display
-    @guides = Guide.all
+    # Retrieve only active guides for display
+    @guides = Guide.active
   end
 
   # GET /guides/:id
@@ -115,8 +115,8 @@ class GuidesController < ApplicationController
   end
 
   # GET /guides/owned
-  # Display all guides owned (purchased) by the current user
   def owned
+    # Retrieve all guides owned (purchased) by the current user (including inactive guides)
     @guides = current_user.owned_guides
   end
 

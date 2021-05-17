@@ -61,6 +61,13 @@ user.guides.create(
       guide_file: guide_template.guide_file.blob,
       price: 0
     },
+    {
+      title: 'Inactive guide',
+      description: 'This is a description',
+      guide_file: guide_template.guide_file.blob,
+      price: 2,
+      active: false
+    },
   ],
 )
 admin.guides.create(
