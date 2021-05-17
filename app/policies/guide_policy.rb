@@ -7,6 +7,7 @@ class GuidePolicy < ApplicationPolicy
     true
   end
 
+  # User must be signed in and own a guide to view it
   def view?
     user && user.owns?(record)
   end
@@ -20,15 +21,15 @@ class GuidePolicy < ApplicationPolicy
   end
 
   def edit?
-    true
+    update?
   end
 
   def update?
-    true
+    user && user.author?(record)
   end
 
   def destroy?
-    true
+    user && user.author?(record)
   end
 
   def purchase?

@@ -17,11 +17,7 @@ class GuidesController < ApplicationController
   # GET/guides/:id/view
   # View the content of a guide
   def view
-    begin
-      authorize @guide
-    rescue NotAuthorizedError
-      redirect_to guide_path(@guide), alert: "You must purchase this guide in order to view it"
-    end
+    authorize_guide(@guide, "You must purchase this guide in order to view it")
     # Get number of pages in guide file for display. Makes a Cloudinary API call.
     @page_count = @guide.get_page_count
   end
@@ -47,10 +43,15 @@ class GuidesController < ApplicationController
   end
 
   # GET /guides/:id/edit
-  def edit; end
+  def edit
+    # If user not authorised, redirect to show page and alert error
+    authorize_guide(@guide, "Only the author may edit this guide")
+  end
 
   # PUT/PATCH /guides/:id
   def update
+    # If user not authorised, redirect to show page and alert error
+    authorize_guide(@guide, "Only the author may edit this guide")
     # Update a guide using strong params from form data.
     # # Redirect and notify if successful, or re-render "edit" page with error messages if update fails.
     if @guide.update(guide_params)
@@ -63,6 +64,8 @@ class GuidesController < ApplicationController
 
   # DELETE /guides/:id
   def destroy
+    # If user not authorised, redirect to show page and alert error
+    authorize_guide(@guide, "Only the author may delete this guide")
     # Delete guide and redirect to index with success notice
     @guide.destroy
     redirect_to guides_url, notice: 'Guide was successfully destroyed.'
@@ -127,5 +130,14 @@ class GuidesController < ApplicationController
   # Get guide attributes from params hash with strong parameters
   def guide_params
     params.require(:guide).permit(:title, :description, :price, :guide_file)
+  end
+
+  # Check if user authorised to access a given guide. If not, redirect to show page with given alert message.
+  def authorize_guide(guide, alert_msg)
+    begin
+      authorize guide
+    rescue NotAuthorizedError
+      redirect_to guide_path(guide), alert: alert_msg
+    end
   end
 end

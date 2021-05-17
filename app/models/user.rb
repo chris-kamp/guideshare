@@ -13,4 +13,8 @@ class User < ApplicationRecord
   def owns?(guide)
     owned_guides.exists?(guide.id)
   end
+
+  def author?(guide)
+    guides.exists?(guide.id)
+  end
 end

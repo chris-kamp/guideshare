@@ -17,8 +17,12 @@
     <% if policy(@guide).view? %>
       <%= link_to "View", view_guide_path(@guide) %>|
     <% end %>
-    <%= link_to "Edit", edit_guide_path(@guide) %>|
-    <%= link_to "Delete", guide_path(@guide), method: :delete, data: {confirm: "Are you sure?"} %>
+    <% if policy(@guide).edit? %>
+      <%= link_to "Edit", edit_guide_path(@guide) %>|
+    <% end %>
+    <% if policy(@guide).destroy? %>
+      <%= link_to "Delete", guide_path(@guide), method: :delete, data: {confirm: "Are you sure?"} %>
+    <% end %>
   </p>
   <p><%= link_to "Back to guides", guides_path %></p>
 </div>
@@ -30,6 +34,11 @@
   var checkoutButton = document.getElementById('checkout-button');
 
   checkoutButton.addEventListener('click', function() {
+    // If user not signed in, send to sign in page and set the devise post-sign-in redirect page to the current url
+    <% if !user_signed_in? %>
+      <% session["user_return_to"] = request.url %>
+      location = "<%= new_user_session_path %>"
+    <% end %>
     // Create a new Checkout Session using the server-side endpoint
     fetch('/guides/<%= @guide.id %>/purchase', {
       method: 'POST',
