@@ -3,8 +3,9 @@ class GuidePolicy < ApplicationPolicy
     true
   end
 
+  # Guide must not have been discarded (with "discard" gem), or else user must own it
   def show?
-    true
+    record.kept? || (user && user.owns?(record))
   end
 
   # User must be signed in and own a guide to view it

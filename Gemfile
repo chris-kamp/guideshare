@@ -55,23 +55,35 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
+# User signup and authentication
 gem "devise", "~> 4.8"
 
+# Enables use of .env to store private environment variables
 gem "dotenv-rails", "~> 2.7"
 
+# Bootstrap styling
 gem 'bootstrap', '~> 5.0.0'
 
+# Bootstrap depends on JQuery
 gem "jquery-rails", "~> 4.4"
 
+# Provids modified form helpers
 gem "simple_form", "~> 5.1"
 
+# Cloudinary CDN activestorage integration
 gem "cloudinary", "~> 1.20"
 gem "activestorage-cloudinary-service", "~> 0.2.3"
 
 gem "active_storage_validations", "~> 0.9.3"
 
+# Payment processing service
 gem "stripe", "~> 5.32"
 
+# User roles
 gem "rolify", "~> 6.0"
 
+# Authorisation and policy scopes
 gem "pundit", "~> 2.1"
+
+# Provides "soft delete" functionality
+gem "discard", "~> 1.2"

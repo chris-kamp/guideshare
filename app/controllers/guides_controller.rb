@@ -6,13 +6,15 @@ class GuidesController < ApplicationController
 
   # GET /guides
   def index
-    # Retrieve all guides for display
-    @guides = Guide.all
+    # Retrieve guides for display. Use "kept" (from discard gem) to retrieve only those that have not been soft deleted.
+    @guides = Guide.kept
   end
 
   # GET /guides/:id
   # Show the details of a guide (but not the file containing guide contents)
-  def show; end
+  def show
+    authorize_guide(@guide, "Guide does not exist or you are not authorised to view it", guides_path)
+  end
 
   # GET/guides/:id/view
   # View the content of a guide
@@ -66,15 +68,17 @@ class GuidesController < ApplicationController
   def destroy
     # If user not authorised, redirect to show page and alert error
     authorize_guide(@guide, "Only the author may delete this guide")
-    # Delete guide and redirect to index with success notice
-    @guide.destroy
-    redirect_to guides_url, notice: 'Guide was successfully destroyed.'
+    # Delete guide only if no users have purchased it.
+    # Otherwise, soft delete using "discard" gem, so users who have already purchased can still access it.
+    @guide.has_owners? ? @guide.discard : @guide.destroy
+    redirect_to guides_url, notice: 'Guide listing was successfully deleted. NOTE: Any users who already purchased the guide will retain access to it.'
   end
 
   # POST /guides/:id/purchase
   def purchase
-    # Prevent initiating purchase if guide already owned
-    if @guide.owned_by?(current_user)
+
+    # Prevent initiating purchase if guide already owned or is discarded
+    if @guide.owned_by?(current_user) || @guide.discarded?
       redirect_to @guide, alert: "Unable to purchase: you already own this guide."
     # Otherwise, create Stripe session and render checkout
     else
@@ -132,12 +136,12 @@ class GuidesController < ApplicationController
     params.require(:guide).permit(:title, :description, :price, :guide_file)
   end
 
-  # Check if user authorised to access a given guide. If not, redirect to show page with given alert message.
-  def authorize_guide(guide, alert_msg)
+  # Check if user authorised to access a given guide. If not, redirect to given path (default: show page) with given alert message.
+  def authorize_guide(guide, alert_msg, redir=guide_path(guide))
     begin
       authorize guide
     rescue NotAuthorizedError
-      redirect_to guide_path(guide), alert: alert_msg
+      redirect_to redir, alert: alert_msg
     end
   end
 end

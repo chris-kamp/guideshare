@@ -1,4 +1,8 @@
 class Guide < ApplicationRecord
+  # Include "discard" gem functionality to permit "soft deletion" of guides
+  # (because "deleted" guides should be accessible by users who have already purchased them)
+  include Discard::Model
+
   belongs_to :user
   has_one_attached :guide_file
   has_many :user_guides, dependent: :destroy
@@ -52,5 +56,10 @@ class Guide < ApplicationRecord
   # Get the username of the user who created the guide
   def author_name
     return user.username
+  end
+
+  # Returns true if guide has been purchased by any user
+  def has_owners?
+    return owners.exists?
   end
 end
