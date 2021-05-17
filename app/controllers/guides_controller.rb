@@ -10,6 +10,12 @@ class GuidesController < ApplicationController
     @guides = Guide.kept
   end
 
+  # GET /guides/dashboard
+  def dashboard
+    # Retrieve all guides of which the current user is the author
+    @guides = current_user.guides
+  end
+
   # GET /guides/:id
   # Show the details of a guide (but not the file containing guide contents)
   def show

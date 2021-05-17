@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   root to: "pages#home"
   # Place /guides/x routes above resources to override "/guides/:id" show path
   get "/guides/owned", to: "guides#owned", as: "owned_guides"
+  get "/guides/dashboard", to: "guides#dashboard", as: "guides_dashboard"
   resources :guides
   post "/guides/:id/purchase", to: "guides#purchase"
   get "/guides/:id/purchase-success", to: "guides#success"
