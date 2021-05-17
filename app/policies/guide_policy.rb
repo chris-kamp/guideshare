@@ -29,11 +29,18 @@ class GuidePolicy < ApplicationPolicy
     user && user.author?(record)
   end
 
+  # Only the author of a guide can destroy, archive or restore from archive
   def destroy?
     user && user.author?(record)
   end
 
+  # Guide cannot be archived if already archived
   def archive?
-    destroy?
+    destroy? && record.kept?
+  end
+
+  # Guide cannot be restored unless it has been archived
+  def restore?
+    destroy? && record.discarded?
   end
 end

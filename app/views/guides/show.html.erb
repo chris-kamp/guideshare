@@ -25,6 +25,8 @@
     <% end %>
     <% if policy(@guide).archive? %>
       |<%= link_to "Archive", archive_guide_path(@guide), data: {confirm: "Are you sure?"} %>
+    <% elsif policy(@guide).restore? %>
+      |<%= link_to "Restore", restore_guide_path(@guide), data: {confirm: "Are you sure?"} %>
     <% end %>
   </p>
   <p><%= link_to "Back to guides", guides_path %></p>

@@ -1,7 +1,7 @@
 class GuidesController < ApplicationController
   before_action :authenticate_user!,
-                only: %i[new create edit update destroy view purchase owned success cancel dashboard]
-  before_action :set_guide, only: %i[show edit update destroy view purchase success cancel archive]
+                only: %i[new create edit update destroy view purchase owned success cancel dashboard archive restore]
+  before_action :set_guide, only: %i[show edit update destroy view purchase success cancel archive restore]
   skip_before_action :verify_authenticity_token, only: [:purchase]
 
   # GET /guides
@@ -92,6 +92,15 @@ class GuidesController < ApplicationController
     redirect_to guides_url, notice: 'Guide listing was successfully archived. NOTE: Any users who already purchased the guide will retain access to it.'
   end
 
+  # GET /guides/:id/restore
+  def restore
+    return unless authorize_guide(@guide, "Guide does not exist or you are not authorised to restore it from the archive")
+
+    # Restore archived guide, making it accessible to users who don't already own it
+    @guide.undiscard
+    redirect_to guide_url(@guide), notice: 'Guide listing was successfully restored.'
+  end
+
   # POST /guides/:id/purchase
   def purchase
 
@@ -154,12 +163,17 @@ class GuidesController < ApplicationController
     params.require(:guide).permit(:title, :description, :price, :guide_file)
   end
 
-  # Check if user authorised to access a given guide. If not, redirect to given path (default: show page) with given alert message.
+  # Check if user authorised to access a given guide.
+  # If not, redirect to given path (default: show page) with given alert message.
   def authorize_guide(guide, alert_msg, redir=guide_path(guide))
     begin
       authorize guide
     rescue NotAuthorizedError
       redirect_to redir, alert: alert_msg
+      # Return false if error occurred to allow conditional check when calling method
+      return false
     end
+    # Return true if no error occurred
+    return true
   end
 end

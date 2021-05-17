@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get "/guides/:id/purchase-cancel", to: "guides#cancel"
   get "/guides/:id/view", to: "guides#view", as: "view_guide"
   get "/guides/:id/archive", to: "guides#archive", as: "archive_guide"
+  get "/guides/:id/restore", to: "guides#restore", as: "restore_guide"
 
   devise_for :users
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
