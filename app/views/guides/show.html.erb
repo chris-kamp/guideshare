@@ -8,7 +8,7 @@
   <% else %>
     <h4 class="text-muted"><%= @guide.price == 0.0 ? "Free" : number_to_currency(@guide.price, locale: :en) %></h4>
   <% end %>
-  <h5 class="text-muted">Created by: <%= @guide.user.username %><%= " (you)" if current_user.author?(@guide) %></h5>
+  <h5 class="text-muted">Created by: <%= @guide.user.username %><%= " (you)" if user_signed_in? && current_user.author?(@guide) %></h5>
   <hr>
   <p><%= @guide.description_text %></p>
   <p>

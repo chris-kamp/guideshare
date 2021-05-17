@@ -1,6 +1,6 @@
 class GuidesController < ApplicationController
   before_action :authenticate_user!,
-                only: %i[new create edit update destroy view purchase owned success cancel]
+                only: %i[new create edit update destroy view purchase owned success cancel dashboard]
   before_action :set_guide, only: %i[show edit update destroy view purchase success cancel]
   skip_before_action :verify_authenticity_token, only: [:purchase]
 

@@ -1,6 +1,6 @@
 class Guide < ApplicationRecord
   # Include "discard" gem functionality to permit "soft deletion" of guides
-  # (because "deleted" guides should be accessible by users who have already purchased them)
+  # (because "deleted" guides should remain accessible by users who have already purchased them)
   include Discard::Model
 
   belongs_to :user
