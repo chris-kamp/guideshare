@@ -1,7 +1,7 @@
 class GuidesController < ApplicationController
   before_action :authenticate_user!,
                 only: %i[new create edit update destroy view purchase owned success cancel dashboard]
-  before_action :set_guide, only: %i[show edit update destroy view purchase success cancel]
+  before_action :set_guide, only: %i[show edit update destroy view purchase success cancel archive]
   skip_before_action :verify_authenticity_token, only: [:purchase]
 
   # GET /guides
@@ -74,10 +74,22 @@ class GuidesController < ApplicationController
   def destroy
     # If user not authorised, redirect to show page and alert error
     authorize_guide(@guide, "Only the author may delete this guide")
-    # Delete guide only if no users have purchased it.
-    # Otherwise, soft delete using "discard" gem, so users who have already purchased can still access it.
-    @guide.has_owners? ? @guide.discard : @guide.destroy
-    redirect_to guides_url, notice: 'Guide listing was successfully deleted. NOTE: Any users who already purchased the guide will retain access to it.'
+    # Allow guide to be deleted only if no users have purchased it.
+    if !@guide.has_owners?
+      @guide.destroy
+      redirect_to guides_url, notice: 'Guide listing was successfully deleted.'
+    else
+      redirect_to guides_url, alert: 'Guide could not be deleted because it has been purchased by one or more users. Try archiving it instead.'
+    end
+  end
+
+  # GET /guides/:id/archive
+  def archive
+    authorize_guide(@guide, "Only the author may archive this guide")
+    # Archive guide by "soft deleting" using "discard" gem. 
+    # Only the author and users who have already purchased the guide will be able to access it.
+    @guide.discard
+    redirect_to guides_url, notice: 'Guide listing was successfully archived. NOTE: Any users who already purchased the guide will retain access to it.'
   end
 
   # POST /guides/:id/purchase

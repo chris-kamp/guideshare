@@ -1,7 +1,7 @@
 <%# Use Stripe for payment processing %>
 <script src="https://js.stripe.com/v3/"></script>
 
-<div class="container">
+<div class="container <%= "bg-light" if @guide.discarded? %>">
   <h1><%= @guide.title %></h1>
   <% if user_signed_in? && @guide.owned_by?(current_user) %>
     <h4 class="text-muted">Owned</h4>
@@ -22,6 +22,9 @@
     <% end %>
     <% if policy(@guide).destroy? %>
       |<%= link_to "Delete", guide_path(@guide), method: :delete, data: {confirm: "Are you sure?"} %>
+    <% end %>
+    <% if policy(@guide).archive? %>
+      |<%= link_to "Archive", archive_guide_path(@guide), data: {confirm: "Are you sure?"} %>
     <% end %>
   </p>
   <p><%= link_to "Back to guides", guides_path %></p>
