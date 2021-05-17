@@ -8,4 +8,9 @@ class User < ApplicationRecord
   has_many :guides, dependent: :destroy
   has_many :user_guides, dependent: :destroy
   has_many :owned_guides, through: :user_guides, source: :guide
+
+  # Returns true if the user owns the passed guide
+  def owns?(guide)
+    owned_guides.exists?(guide.id)
+  end
 end

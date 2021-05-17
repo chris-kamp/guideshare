@@ -17,6 +17,11 @@ class GuidesController < ApplicationController
   # GET/guides/:id/view
   # View the content of a guide
   def view
+    begin
+      authorize @guide
+    rescue NotAuthorizedError
+      redirect_to guide_path(@guide), alert: "You must purchase this guide in order to view it"
+    end
     # Get number of pages in guide file for display. Makes a Cloudinary API call.
     @page_count = @guide.get_page_count
   end
