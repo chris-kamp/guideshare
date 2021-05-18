@@ -1,4 +1,11 @@
 <div class="container">
   <h1 class="mb-5">Guides</h1>
+
+  <%= simple_form_for :search, url: guides_path, method: "GET", html: { class: 'form-inline' } do |f| %>
+    <%= f.input :search_query, input_html: {value: ""}, label: "Search by title", required: false %>
+    <br>
+    <%= f.submit "Search", class: "btn btn-primary" %>
+  <% end %>
+  <br><br>
   <%= render "guides" %>
 </div>
