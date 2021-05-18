@@ -14,18 +14,25 @@ class GuidesController < ApplicationController
     if params["search"].present?
       # Get search query from search params
       @query = params["search"]["query"]
-      # Get tag IDs from search params, and remove any empty string elements (first element is always an empty string due to Rails behaviour)
-      # @filter_tags = @tags.where("id IN (?)", (params["search"]["tags"] - [""])
+      # Get tag IDs from search params, and remove any empty string elements
+      # (first element is always an empty string due to Rails behaviour)
       @tag_ids = (params["search"]["tags"] - [""]).map(&:to_i)
+      @tags_match = (params["search"]["tags_match"]).to_i
     end
     # If search query is "present" (non-empty and not only whitespace), filter
     # for guides with titles matching the query (using a case-insensitive wildcard search)
     if @query.present?
       @guides = @guides.where("title ILIKE ?", "%#{@query}%")
     end
-    # If tag ids are present, filter for guides whose tags include any of them
-    if @tag_ids.present?
-      @guides = @guides.select { |guide| @tag_ids.any?{ |tag_id| guide.tag_ids.include?(tag_id) } }
+    # If tag ids are present, filter for guides whose tags include them
+    if @tag_ids.present? 
+      # Match any tags if "Any" selected
+      if @tags_match == 0
+        @guides = @guides.select { |guide| @tag_ids.any?{ |tag_id| guide.tag_ids.include?(tag_id) } }
+      # Otherwise, match all tags
+      else
+        @guides = @guides.select { |guide| @tag_ids.all?{ |tag_id| guide.tag_ids.include?(tag_id) } } 
+      end
     end
   end
 
