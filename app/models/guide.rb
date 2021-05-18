@@ -7,6 +7,8 @@ class Guide < ApplicationRecord
   has_one_attached :guide_file
   has_many :user_guides, dependent: :destroy
   has_many :owners, through: :user_guides, source: :user
+  has_many :guide_tags, dependent: :destroy
+  has_many :tags, through: :guide_tags
 
   validates :title,
             presence: true,
