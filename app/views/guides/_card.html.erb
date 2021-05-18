@@ -18,7 +18,14 @@
       <%= link_to "Edit", edit_guide_path(guide), class: "card-link" %>
     <% end %>
     <% if policy(guide).destroy? %>
-      <%= link_to "Delete", guide_path(guide), method: :delete, class: "card-link", data: {confirm: "Are you sure?"} %>
+      <%# Delete link disabled with explanatory tooltip if a guide has been purchased by one or more users %>
+      <% if guide.has_owners? %>
+        <div class="d-inline-block" data-toggle="tooltip" data-placement="bottom" title="Guides that have been purchased by users can only be archived, not deleted.">
+          <%= link_to "Delete", guide_path(guide), method: :delete, class: "btn btn-secondary disabled", data: {confirm: "Are you sure?"} %>
+        </div>
+      <% else %>
+        <%= link_to "Delete", guide_path(guide), method: :delete, class: "btn btn-secondary", data: {confirm: "Are you sure?"} %>
+      <% end %>
     <% end %>
     <% if policy(guide).archive? %>
       <%= link_to "Archive", archive_guide_path(guide), class: "card-link", data: {confirm: "Are you sure?"} %>
@@ -27,3 +34,8 @@
     <% end %>
   </div>
 </div>
+<script>
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
