@@ -10,6 +10,7 @@ require 'uri'
 
 User.destroy_all
 Guide.destroy_all
+Tag.destroy_all
 
 # Seed users
 user =

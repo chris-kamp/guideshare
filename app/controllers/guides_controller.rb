@@ -10,9 +10,22 @@ class GuidesController < ApplicationController
     @tags = Tag.all
     # Retrieve guides for display. Use "kept" (from discard gem) to retrieve only those that have not been soft deleted.
     @guides = Guide.kept
-    # If search queries are present, filter for guides with titles matching the query (using a case-insensitive wildcard search)
+
     if params["search"].present?
-      @guides = @guides.where("title ILIKE ?", "%#{params["search"]["search_query"]}%")
+      # Get search query from search params
+      @query = params["search"]["query"]
+      # Get tag IDs from search params, and remove any empty string elements (first element is always an empty string due to Rails behaviour)
+      # @filter_tags = @tags.where("id IN (?)", (params["search"]["tags"] - [""])
+      @tag_ids = (params["search"]["tags"] - [""]).map(&:to_i)
+    end
+    # If search query is "present" (non-empty and not only whitespace), filter
+    # for guides with titles matching the query (using a case-insensitive wildcard search)
+    if @query.present?
+      @guides = @guides.where("title ILIKE ?", "%#{@query}%")
+    end
+    # If tag ids are present, filter for guides whose tags include any of them
+    if @tag_ids.present?
+      @guides = @guides.select { |guide| @tag_ids.any?{ |tag_id| guide.tag_ids.include?(tag_id) } }
     end
   end
 
