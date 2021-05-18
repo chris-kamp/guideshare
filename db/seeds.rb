@@ -31,6 +31,26 @@ devtester =
     password: ENV['SEED_DEVTESTER_PASSWORD'],
   )
 
+# Seed tags
+
+tags = Tag.create([
+  {
+    name: "DIY"
+  },
+  {
+    name: "Tech"
+  },
+  {
+    name: "Health & Fitness"
+  },
+  {
+    name: "Arts & Crafts"
+  },
+  {
+    name: "Finance"
+  }
+])
+
 # To avoid excessive Cloudinary requests during testing, load one attachment and replicate for other seeded guides.
 guide_attachment =
   URI.open(
@@ -54,12 +74,14 @@ user.guides.create(
     {
       title: 'Guide with no description',
       guide_file: guide_template.guide_file.blob,
+      tags: [tags[0], tags[3]]
     },
     {
       title: 'Guide 3',
       description: 'This is the description',
       guide_file: guide_template.guide_file.blob,
-      price: 0
+      price: 0,
+      tags: [tags[1]]
     },
   ],
 )
@@ -69,7 +91,8 @@ admin.guides.create(
       title: 'Another guide',
       description: "This one's by the admin",
       guide_file: guide_template.guide_file.blob,
-      price: 5.5
+      price: 5.5,
+      tags: [tags[0], tags[4]]
     },
     {
       title: 'Another admin guide with a long description',
