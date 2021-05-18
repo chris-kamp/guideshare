@@ -6,11 +6,13 @@ class GuidesController < ApplicationController
 
   # GET /guides
   def index
+    # Retrieve tags for use in checkboxes
+    @tags = Tag.all
     # Retrieve guides for display. Use "kept" (from discard gem) to retrieve only those that have not been soft deleted.
     @guides = Guide.kept
     # If search queries are present, filter for guides with titles matching the query (using a case-insensitive wildcard search)
     if params["search"].present?
-      @guides = Guide.kept.where("title ILIKE ?", "%#{params["search"]["search_query"]}%")
+      @guides = @guides.where("title ILIKE ?", "%#{params["search"]["search_query"]}%")
     end
   end
 
