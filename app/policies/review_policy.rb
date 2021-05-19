@@ -16,4 +16,9 @@ class ReviewPolicy < ApplicationPolicy
   def update?
     record.user == user
   end
+
+  # Only the author of a review can delete it
+  def destroy?
+    record.user == user
+  end
 end

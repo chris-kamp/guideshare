@@ -48,7 +48,12 @@ class ReviewsController < ApplicationController
     end
   end
 
+  # DELETE /reviews/:id
   def destroy
+    return unless authorize_review(@review, "Only the author may delete this review")
+    @guide = @review.guide
+    @review.destroy
+    redirect_to @guide, notice: 'Review was successfully deleted.'
   end
 
   private
