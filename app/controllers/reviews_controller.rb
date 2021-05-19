@@ -1,6 +1,7 @@
 class ReviewsController < ApplicationController
   before_action :authenticate_user!, only: %i[new create edit update destroy]
   before_action :set_review, only: %i[show edit update destroy]
+  before_action :set_guide, only: %i[new create]
 
   def index
   end
@@ -9,11 +10,9 @@ class ReviewsController < ApplicationController
   end
 
   def new
-    # Get guide by id from RESTful params. Use find_by to return false if not found (where find() would raise exception)
-    @guide = Guide.find_by(id: params[:guide_id])
     # Redirect with alert unless guide with given ID exists and has been purchased by the current user
     unless @guide && @guide.owned_by?(current_user)
-      redirect_to guides_path, alert: "Guide does not exist or cannot be reviewed. You can only review a guide you own and which has not been archived."
+      redirect_to guides_path, alert: "Guide does not exist or you are not authorised to review it. You can only review a guide you own and which has not been archived."
     end
     @review = Review.new
     # Set guide id for inclusion in hidden form field
@@ -43,6 +42,10 @@ class ReviewsController < ApplicationController
 
   def set_review
     @review = Review.find(params[:id])
+  end
+
+  def set_guide
+    @guide = Guide.find(params[:guide_id])
   end
 
   def review_params

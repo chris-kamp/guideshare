@@ -1,5 +1,5 @@
   <%# Form created using simple form gem with bootstrap styles integration. %>
-  <%= simple_form_for(@review, wrapper: :horizontal_form) do |f| %>
+  <%= simple_form_for([@guide, @review], wrapper: :horizontal_form) do |f| %>
     <%= f.error_notification %>
   
     <div class="form-inputs">

@@ -20,7 +20,7 @@
       <button id="checkout-button">Purchase</button>
     <% end %>
     <% if @guide.owned_by?(current_user) %>
-      |<%= link_to "Review", new_review_path(guide_id: @guide.id) %>
+      |<%= link_to "Review", new_guide_review_path(guide_id: @guide.id) %>
     <% end %>
     <% if policy(@guide).edit? %>
       |<%= link_to "Edit", edit_guide_path(@guide) %>
@@ -41,6 +41,16 @@
       |<%= link_to "Restore", restore_guide_path(@guide), data: {confirm: "Are you sure?"} %>
     <% end %>
   </p>
+  <h4>Reviews</h4>
+  <hr>
+  <% @guide.reviews.each do |review| %>
+    <p>
+      <p>By: <%= review.user.username %></p>
+      <p>Rating: <%= review.rating %> </p>
+      <p><%= review.content %> </p>
+    </p>
+    <hr>
+  <% end %>
   <p><%= link_to "Back to guides", guides_path %></p>
 </div>
 
