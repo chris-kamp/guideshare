@@ -47,6 +47,8 @@ class GuidesController < ApplicationController
   def show
     # If user not authorised, redirect to show page and alert error.
     authorize_guide(@guide, "Guide does not exist or you are not authorised to view it", guides_path)
+    # Select the most recent 3 reviews to display
+    @reviews = @guide.reviews.order(created_at: :desc).limit(3)
   end
 
   # GET/guides/:id/view
