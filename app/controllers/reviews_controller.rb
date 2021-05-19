@@ -1,9 +1,12 @@
 class ReviewsController < ApplicationController
   before_action :authenticate_user!, only: %i[new create edit update destroy]
   before_action :set_review, only: %i[show edit update destroy]
-  before_action :set_guide, only: %i[new create]
+  before_action :set_guide, only: %i[new create index]
 
+  # GET /guides/:guide_id/reviews
   def index
+    # Retrieve only those reviews belonging to the relevant guide for display
+    @reviews = @guide.reviews
   end
 
   # GET /guides/:guide_id/reviews/new

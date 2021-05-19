@@ -1,2 +1,19 @@
-<h1>Reviews#index</h1>
-<p>Find me in app/views/reviews/index.html.erb</p>
+<div class="container">
+  <h1 class="mb-5">Reviews for "<%= @guide.title %>"</h1>
+  <hr>
+  <% @reviews.each do |review| %>
+    <p>
+      <p>By: <%= review.user.username %></p>
+      <p>Rating: <%= review.rating %> </p>
+      <p><%= review.content %> </p>
+      <% if policy(review).edit? %>
+        <%= link_to "Edit", edit_review_path(review) %>
+      <% end %>
+      <% if policy(review).destroy? %>
+        | <%= link_to "Delete", review_path(review), method: :delete, data: {confirm: "Are you sure?"} %>
+      <% end %>
+    </p>
+    <hr>
+  <% end %>
+  <p><%= link_to "Back to guide", guide_path(@guide) %></p>
+</div>
