@@ -16,6 +16,9 @@
     <% if policy(guide).view? %>
       <%= link_to "View", view_guide_path(guide), class: "card-link" %>
     <% end %>
+    <% if guide.owned_by?(current_user) %>
+      |<%= link_to "Review", new_review_path(guide_id: guide.id) %>
+    <% end %>
     <% if policy(guide).edit? %>
       <%= link_to "Edit", edit_guide_path(guide), class: "card-link" %>
     <% end %>
