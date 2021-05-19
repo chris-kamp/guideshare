@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  get 'reviews/index'
+  get 'reviews/show'
+  get 'reviews/new'
+  get 'reviews/create'
+  get 'reviews/edit'
+  get 'reviews/update'
+  get 'reviews/destroy'
   root to: "pages#home"
   # Place /guides/x routes above resources to override "/guides/:id" show path
   get "/guides/owned", to: "guides#owned", as: "owned_guides"

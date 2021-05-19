@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_18_042216) do
+ActiveRecord::Schema.define(version: 2021_05_19_035356) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,17 @@ ActiveRecord::Schema.define(version: 2021_05_18_042216) do
     t.datetime "discarded_at"
     t.index ["discarded_at"], name: "index_guides_on_discarded_at"
     t.index ["user_id"], name: "index_guides_on_user_id"
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.integer "rating", null: false
+    t.text "content"
+    t.bigint "user_id", null: false
+    t.bigint "guide_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["guide_id"], name: "index_reviews_on_guide_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -116,6 +127,8 @@ ActiveRecord::Schema.define(version: 2021_05_18_042216) do
   add_foreign_key "guide_tags", "guides"
   add_foreign_key "guide_tags", "tags"
   add_foreign_key "guides", "users"
+  add_foreign_key "reviews", "guides"
+  add_foreign_key "reviews", "users"
   add_foreign_key "user_guides", "guides"
   add_foreign_key "user_guides", "users"
 end

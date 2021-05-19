@@ -9,6 +9,7 @@ class Guide < ApplicationRecord
   has_many :owners, through: :user_guides, source: :user
   has_many :guide_tags, dependent: :destroy
   has_many :tags, through: :guide_tags
+  has_many :reviews, dependent: :destroy
 
   validates :title,
             presence: true,
