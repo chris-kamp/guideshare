@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   # Use shallow nesting to include :guide_id param in index, create and new Review paths
   resources :guides, shallow: true do
-    resources :reviews
+    resources :reviews, except: :show
   end
 
   # Custom routes for guides

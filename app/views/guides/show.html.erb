@@ -48,6 +48,9 @@
       <p>By: <%= review.user.username %></p>
       <p>Rating: <%= review.rating %> </p>
       <p><%= review.content %> </p>
+      <% if policy(review).edit? %>
+        <%= link_to "Edit", edit_review_path(review) %>
+      <% end %>
     </p>
     <hr>
   <% end %>
