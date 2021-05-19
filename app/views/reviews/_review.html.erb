@@ -1,0 +1,12 @@
+<p>
+  <p>By: <%= review.user.username %></p>
+  <p>Rating: <%= review.rating %> </p>
+  <p><%= review.content %> </p>
+  <% if policy(review).edit? %>
+    <%= link_to "Edit", edit_review_path(review) %>
+  <% end %>
+  <% if policy(review).destroy? %>
+    | <%= link_to "Delete", review_path(review), method: :delete, data: {confirm: "Are you sure?"} %>
+  <% end %>
+</p>
+<hr>
