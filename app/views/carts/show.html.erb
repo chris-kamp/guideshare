@@ -4,3 +4,9 @@
     <li>Title: <%= guide.title %> | Price: <%= guide.price %> </li>
   <% end %>
 <ol>
+
+<p>
+  <%# Link back to previous location if any (and not equal to current location), otherwise to guides index %>
+  <%# link_to :back not used as it links to current page if referer is current page %>
+  <%= link_to("Back", (request.referer.present? && request.referer != request.url) ? request.referer : guides_path) %>
+</p>

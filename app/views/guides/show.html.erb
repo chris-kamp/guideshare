@@ -19,8 +19,8 @@
       <%= link_to "View", view_guide_path(@guide) %>
     <% else %>
       <%# Creates form with hidden fields for "CartGuide". Posts to cart_guides#create, effectively adding a guide to user's cart. %>
-      <% unless current_user.cart.guides.exists?(@guide.id) %>
-        <%= button_to "Add to cart", cart_guides_path, params: { cart_guide: { cart_id: current_user.cart.id, guide_id: @guide.id } } %> | 
+      <% unless user_signed_in? && current_user.cart.guides.exists?(@guide.id) %>
+        <%= button_to "Add to cart", cart_guides_path, params: { cart_guide: { cart_id: user_signed_in? && current_user.cart.id, guide_id: @guide.id } } %> | 
       <% end %>
       <%# Stripe checkout button %>
       <button id="checkout-button">Purchase</button>

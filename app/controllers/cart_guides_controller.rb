@@ -1,4 +1,6 @@
 class CartGuidesController < ApplicationController
+  before_action :authenticate_user!
+  
   def create
     @cart_guide = CartGuide.new(cart_guide_params)
     # Redirect and notify success, or re-render "new" page with error messages if creation fails
