@@ -4,7 +4,7 @@ class CartsController < ApplicationController
 
   # GET /cart
   def show
-    @guides = @cart.guides
+    @cart_guides = @cart.cart_guides
   end
 
   private

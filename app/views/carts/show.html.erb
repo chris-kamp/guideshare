@@ -1,7 +1,9 @@
 <h1><%= @cart.user.username %>'s Shopping Cart</h1>
 <ol>
-  <% @guides.each do |guide| %>
-    <li>Title: <%= guide.title %> | Price: <%= guide.price %> </li>
+  <% @cart_guides.each do |cart_guide| %>
+    <li>
+      Title: <%= cart_guide.guide.title %> | Price: <%= cart_guide.guide.price %> | <%= button_to "Remove", cart_guide_path(cart_guide), method: :delete %> |
+    </li>
   <% end %>
 <ol>
 
