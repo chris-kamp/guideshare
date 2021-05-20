@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_19_035356) do
+ActiveRecord::Schema.define(version: 2021_05_20_012150) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,22 @@ ActiveRecord::Schema.define(version: 2021_05_19_035356) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "cart_guides", force: :cascade do |t|
+    t.bigint "cart_id", null: false
+    t.bigint "guide_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cart_id"], name: "index_cart_guides_on_cart_id"
+    t.index ["guide_id"], name: "index_cart_guides_on_guide_id"
+  end
+
+  create_table "carts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_carts_on_user_id"
   end
 
   create_table "guide_tags", force: :cascade do |t|
@@ -124,6 +140,9 @@ ActiveRecord::Schema.define(version: 2021_05_19_035356) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "cart_guides", "carts"
+  add_foreign_key "cart_guides", "guides"
+  add_foreign_key "carts", "users"
   add_foreign_key "guide_tags", "guides"
   add_foreign_key "guide_tags", "tags"
   add_foreign_key "guides", "users"

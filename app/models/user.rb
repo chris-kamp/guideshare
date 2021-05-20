@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :owned_guides, through: :user_guides, source: :guide
   has_many :reviews, dependent: :destroy
   has_many :reviewed_guides, through: :reviews, source: :guide
+  has_one :cart, required: true
 
   # Returns true if the user owns the passed guide
   def owns?(guide)
