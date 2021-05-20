@@ -19,8 +19,13 @@
     <% else %>
       <button id="checkout-button">Purchase</button>
     <% end %>
+    <%# If user owns the guide, link to create a new review, or to edit existing review if one already made %>
     <% if @guide.owned_by?(current_user) %>
-      |<%= link_to "Review", new_guide_review_path(guide_id: @guide.id) %>
+      <% unless current_user.reviewed?(@guide) %>
+        |<%= link_to("Review", new_guide_review_path(guide_id: @guide.id)) %>
+      <% else %>
+        |<%= link_to("Edit Review", edit_review_path(current_user.review(@guide))) %>
+      <% end %>
     <% end %>
     <% if policy(@guide).edit? %>
       |<%= link_to "Edit", edit_guide_path(@guide) %>

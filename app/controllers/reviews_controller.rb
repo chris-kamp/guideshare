@@ -11,6 +11,11 @@ class ReviewsController < ApplicationController
 
   # GET /guides/:guide_id/reviews/new
   def new
+    # Redirect with alert if user has already reviewed guide
+    if current_user.reviewed?(@guide)
+      redirect_to @guide, alert: "You have already reviewed this guide. You cannot review the same guide more than once."
+      return
+    end
     @review = Review.new
     # Set guide id for authorisation and inclusion in hidden form field
     @review.guide_id = params[:guide_id]
@@ -20,6 +25,11 @@ class ReviewsController < ApplicationController
 
   # POST /guides/:guide_id/reviews
   def create
+    # Redirect with alert if user has already reviewed guide
+    if current_user.reviewed?(@guide)
+      redirect_to @guide, alert: "You have already reviewed this guide. You cannot review the same guide more than once."
+      return
+    end
     @review = current_user.reviews.new(review_params)
     return false unless authorize_review(@review, "Guide does not exist or you are not authorised to review it. You can only review a guide you own.", guides_path)
     if @review.save
