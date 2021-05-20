@@ -9,6 +9,7 @@
     <h4 class="text-muted"><%= @guide.price == 0.0 ? "Free" : number_to_currency(@guide.price, locale: :en) %></h4>
   <% end %>
   <h5 class="text-muted">Created by: <%= @guide.user.username %><%= " (you)" if user_signed_in? && current_user.author?(@guide) %></h5>
+  <h5 class="card-subtitle mb-2 text-muted">Rating: <%= @guide.rating %></h5>
   <p class="text-muted">Tags: <%= @guide.tags.map(&:name).join(", ") %></p>
 
   <hr>
