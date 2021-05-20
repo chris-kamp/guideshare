@@ -1,0 +1,6 @@
+<h1><%= @cart.user.username %>'s Shopping Cart</h1>
+<ol>
+  <% @guides.each do |guide| %>
+    <li>Title: <%= guide.title %> | Price: <%= guide.price %> </li>
+  <% end %>
+<ol>
