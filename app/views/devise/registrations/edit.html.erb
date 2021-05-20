@@ -4,6 +4,7 @@
     <%= f.error_notification %>
     <div class="form-inputs">
       <%= f.input :email, required: true, autofocus: true %>
+      <%# Added username field to edit registration form %>
       <%= f.input :username, required: true, wrapper_html: {class: "mt-5 mb-5"} %>
       <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
         <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>

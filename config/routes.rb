@@ -19,6 +19,6 @@ Rails.application.routes.draw do
   get "/guides/:id/archive", to: "guides#archive", as: "archive_guide"
   get "/guides/:id/restore", to: "guides#restore", as: "restore_guide"
 
-  devise_for :users
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  # Use custom SignupsController to handle registrations (extends devise default to provide added functionality)
+  devise_for :users, controllers: { registrations: "signups" }
 end

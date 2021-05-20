@@ -18,18 +18,21 @@ user =
     email: 'user@user.com',
     username: 'user',
     password: ENV['SEED_USER_PASSWORD'],
+    cart: Cart.new
   )
 admin =
   User.create(
     email: 'admin@admin.com',
     username: 'admin',
     password: ENV['SEED_ADMIN_PASSWORD'],
+    cart: Cart.new
   )
 devtester =
   User.create(
     email: 'devtester9001@gmail.com',
     username: 'devtester',
     password: ENV['SEED_DEVTESTER_PASSWORD'],
+    cart: Cart.new
   )
 
 # Seed tags

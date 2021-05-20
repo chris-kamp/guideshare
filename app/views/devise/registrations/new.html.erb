@@ -7,6 +7,7 @@
                   required: true,
                   autofocus: true,
                   input_html: { autocomplete: "email" }, wrapper_html: {class: "mt-5 mb-5"}%>
+      <%# Added username field to signup form %>
       <%= f.input :username,
                   required: true, wrapper_html: {class: "mt-5 mb-5"} %>
       <%= f.input :password,
@@ -16,6 +17,12 @@
       <%= f.input :password_confirmation,
                   required: true,
                   input_html: { autocomplete: "new-password" }, wrapper_html: {class: "mt-5 mb-5"} %>
+      
+      <%# Include hidden field for shopping cart, to allow user's shopping cart to be generated from strong params in #create %>
+      <%= f.simple_fields_for :cart do |c| %>
+        <%= c.input :user_id, as: :hidden %>
+      <% end %>
+
     </div>
     <div class="form-actions">
       <%= f.button :submit, "Sign up", class: "btn-primary mb-3" %>
