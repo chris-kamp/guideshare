@@ -2,6 +2,7 @@ class CartsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_cart
 
+  # GET /cart
   def show
     @guides = @cart.guides
   end
