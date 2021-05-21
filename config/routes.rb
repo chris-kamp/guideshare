@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   # Custom routes for guides
   get "/guides/:id/view", to: "guides#view", as: "view_guide"
   get "/guides/:id/archive", to: "guides#archive", as: "archive_guide"
-  get "/guides/:id/restore", to: "guides#restor# Dele", as: "restore_guide"
+  get "/guides/:id/restore", to: "guides#restore", as: "restore_guide"
 
   # CARTS
   # No restful params required as users can only view their own cart
@@ -29,6 +29,7 @@ Rails.application.routes.draw do
 
   # CART GUIDES
   resources :cart_guides, only: [:create, :destroy]
+  delete "/cart_guides", to: "cart_guides#destroy_all", as: "clear_cart"
 
   # USERS
   # Use custom SignupsController to handle registrations (extends devise default to provide added functionality)

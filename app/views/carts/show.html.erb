@@ -10,11 +10,12 @@
   <% end %>
 <ol>
 <p>TOTAL: <%= @cart.total %></p>
-
 <p>
-  
   <%# Render stripe checkout button if cart is not empty %>
-  <% unless @cart_guides.empty? %><button id="checkout-button">Check Out</button><% end %>
+  <% unless @cart_guides.empty? %>
+    <button id="checkout-button">Check Out</button> | 
+    <%= button_to "Clear Cart", clear_cart_path, method: :delete, data: {confirm: "Are you sure?"} %>
+  <% end %>
   <%# Link back to previous location if any (and not equal to current location), otherwise to guides index %>
   <%# link_to :back not used as it loops to current page if request came from the current page %>
   <%= link_to("Back", (request.referer.present? && request.referer != request.url) ? request.referer : guides_path) %>

@@ -19,6 +19,14 @@ class CartGuidesController < ApplicationController
     redirect_to cart_url, notice: 'Guide was successfully removed from cart.'
   end
 
+  # DELETE /cart_guides
+  def destroy_all
+    # Select all guides belonging to the current user (noting user authentication occurs before action)
+    @cart_guides = current_user.cart.cart_guides
+    @cart_guides.destroy_all
+    redirect_to cart_url, notice: 'All items cleared from cart.'
+  end
+
   private
 
   def cart_guide_params
