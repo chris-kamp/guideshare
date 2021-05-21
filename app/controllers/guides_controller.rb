@@ -120,6 +120,8 @@ class GuidesController < ApplicationController
     # Archive guide by "soft deleting" using "discard" gem. 
     # Only the author and users who have already purchased the guide will be able to access it.
     @guide.discard
+    # Dependents are not destroyed when discarding, so manually remove discarded guides from all users' shopping carts
+    CartGuide.where(guide_id: @guide.id).destroy_all
     redirect_to guides_url, notice: 'Guide listing was successfully archived. NOTE: Any users who already purchased the guide will retain access to it.'
   end
 
