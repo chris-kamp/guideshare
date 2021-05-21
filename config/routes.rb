@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   # Place /guides/x routes above resources to override "/guides/:id" show path
   get "/guides/owned", to: "guides#owned", as: "owned_guides"
   get "/guides/dashboard", to: "guides#dashboard", as: "guides_dashboard"
-  post "/guides/checkout", to: "guides#checkout"
+  post "/guides/checkout", to: "guides#checkout", as: "checkout"
   get "/guides/checkout-success", to: "guides#success"
   get "/guides/checkout-cancel", to: "guides#cancel"
 

@@ -135,6 +135,11 @@ class GuidesController < ApplicationController
   # POST /guides/checkout
   def checkout
     @guide = Guide.find(params[:guide_id])
+    if params[:free]
+      add_to_library([@guide])
+      redirect_to owned_guides_path, notice: "Guide was added to your library!"
+      return
+    end
     # Prevent initiating purchase if guide already owned or is archived
     return false if @guide.owned_by?(current_user) || @guide.discarded?
     # Set API key to access Stripe API
@@ -180,11 +185,8 @@ class GuidesController < ApplicationController
     # Select only those guides whose ids are included in the line items data
     @guides = Guide.where(id: @guide_ids)
     # Add each purchased guides to owned guides, unless already present
-    @guides.each do |guide|
-      current_user.owned_guides.push(guide) unless guide.owned_by?(current_user)
-    end
+    add_to_library(@guides)
     redirect_to owned_guides_path, notice: "Thank you for your purchase!"
-
   end
 
   # GET /guides/checkout-cancel
@@ -223,5 +225,12 @@ class GuidesController < ApplicationController
     end
     # Return true if no error occurred
     return true
+  end
+
+  # Add a given array of guides to the current user's library, unless already owned
+  def add_to_library(guides)
+    guides.each do |guide|
+      current_user.owned_guides.push(guide) unless guide.owned_by?(current_user)
+    end
   end
 end
