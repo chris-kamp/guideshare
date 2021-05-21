@@ -2,6 +2,7 @@ class CartGuidesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_cart_guide, only: :destroy
 
+  # POST /cart_guides
   def create
     @cart_guide = CartGuide.new(cart_guide_params)
     # Redirect and notify success, or re-render "new" page with error messages if creation fails
@@ -14,12 +15,15 @@ class CartGuidesController < ApplicationController
   end
 
   # DELETE /cart_guides/:id
+  # Remove an item from a cart
   def destroy
+    authorize(@cart_guide)
     @cart_guide.destroy
     redirect_to cart_url, notice: 'Guide was successfully removed from cart.'
   end
 
   # DELETE /cart_guides
+  # Remove all items from current user's cart
   def destroy_all
     # Select all guides belonging to the current user (noting user authentication occurs before action)
     @cart_guides = current_user.cart.cart_guides
