@@ -1,8 +1,8 @@
 class GuidesController < ApplicationController
   before_action :authenticate_user!,
                 only: %i[new create edit update destroy view purchase owned success cancel dashboard archive restore]
-  before_action :set_guide, only: %i[show edit update destroy view purchase success cancel archive restore]
-  skip_before_action :verify_authenticity_token, only: [:purchase]
+  before_action :set_guide, only: %i[show edit update destroy view archive restore]
+  skip_before_action :verify_authenticity_token, only: [:checkout]
 
   # GET /guides
   def index
@@ -132,48 +132,65 @@ class GuidesController < ApplicationController
     redirect_to guide_url(@guide), notice: 'Guide listing was successfully restored.'
   end
 
-  # POST /guides/:id/purchase
-  def purchase
-
-    # Prevent initiating purchase if guide already owned or is discarded
-    if @guide.owned_by?(current_user) || @guide.discarded?
-      redirect_to @guide, alert: "Unable to purchase: you already own this guide."
-    # Otherwise, create Stripe session and render checkout
-    else
-      Stripe.api_key = ENV['STRIPE_API_KEY']
-      session = Stripe::Checkout::Session.create({
-        payment_method_types: ['card'],
-        line_items: [{
-          price_data: {
-            currency: 'aud',
-            product_data: {
-              name: @guide.title,
-            },
-            unit_amount: 500,
+  # POST /guides/checkout
+  def checkout
+    @guide = Guide.find(params[:guide_id])
+    # Prevent initiating purchase if guide already owned or is archived
+    return false if @guide.owned_by?(current_user) || @guide.discarded?
+    # Set API key to access Stripe API
+    Stripe.api_key = ENV['STRIPE_API_KEY']
+    # Create Stripe session
+    session = Stripe::Checkout::Session.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+        price_data: {
+          currency: 'aud',
+          # Pass through Guide title and id as part of Stripe session data
+          product_data: {
+            name: @guide.title,
+            metadata: {
+              id: @guide.id,
+            }
           },
-          quantity: 1,
-        }],
-        mode: 'payment',
-        # These routes handle successful or canceled checkout
-        success_url: "#{request.base_url}/guides/#{@guide.id}/purchase-success?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url: "#{request.base_url}/guides/#{@guide.id}/purchase-cancel",
-      })
-      render json: session
-    end
+          # Price (in cents) is 100 times the guides "price" attribute (stored in dollars as a decimal)
+          unit_amount: (@guide.price * 100).to_i,
+        },
+        quantity: 1
+      }
+    ],
+      mode: 'payment',
+      # These routes handle successful or canceled checkout
+      success_url: "#{request.base_url}/guides/checkout-success?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: "#{request.base_url}/guides/checkout-cancel",
+    })
+    # Send session data as JSON
+    render json: session
   end
 
-  # GET /guides/:id/purchase-success
+  # GET /guides/checkout-success
   # Called when Stripe checkout succeeds
   def success
-    # Add purchased guide to owned guides, unless already present
-    current_user.owned_guides.push(@guide) unless @guide.owned_by?(current_user)
-    redirect_to @guide, notice: "Thank you for your purchase!"
+    # Set key to access Stripe API
+    Stripe.api_key = ENV['STRIPE_API_KEY']
+    # Stripe API call to retrieve information about line items included in purchase
+    @line_items_data = Stripe::Checkout::Session.list_line_items(params[:session_id])['data']
+    # Extract guide IDs from Stripe session data (set when clicking purchase/checkout button) and map them to @guide_ids
+    @guide_ids = @line_items_data.map { |item| Stripe::Product.retrieve(item['price']['product'])['metadata']['id'] }
+    # Select only those guides whose ids are included in the line items data
+    @guides = Guide.where(id: @guide_ids)
+    # Add each purchased guides to owned guides, unless already present
+    @guides.each do |guide|
+      current_user.owned_guides.push(guide) unless guide.owned_by?(current_user)
+    end
+    redirect_to owned_guides_path, notice: "Thank you for your purchase!"
+
   end
 
-  # GET /guides/:id/purchase-cancel
+  # GET /guides/checkout-cancel
   # Called when Stripe checkout canceled
   def cancel
-    redirect_to @guide, alert: "Transaction canceled."
+    redirect_to guides_path, notice: "Purchase canceled."
   end
 
   # GET /guides/owned

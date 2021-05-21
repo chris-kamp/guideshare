@@ -23,7 +23,7 @@
         <%= button_to "Add to cart", cart_guides_path, params: { cart_guide: { cart_id: user_signed_in? && current_user.cart.id, guide_id: @guide.id } } %> | 
       <% end %>
       <%# Stripe checkout button %>
-      <button id="checkout-button">Purchase</button>
+      <button id="checkout-button">Buy Now</button>
     <% end %>
     <%# If user owns the guide, link to create a new review, or to edit existing review if one already made %>
     <% if @guide.owned_by?(current_user) %>
@@ -74,8 +74,14 @@
       location = "<%= new_user_session_path %>"
     <% end %>
     // Create a new Checkout Session using the server-side endpoint
-    fetch('/guides/<%= @guide.id %>/purchase', {
+    fetch('/guides/checkout', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'guide_id': '<%=@guide.id%>'
+      })
     })
     .then(function(response) {
       return response.json();
