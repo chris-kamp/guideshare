@@ -10,7 +10,7 @@ class CartsController < ApplicationController
   private
 
   # Because users can only view their own cart, retrieve the current user's cart
-  # (noting that user login is authenticated occurs before this step)
+  # (noting that user login is authenticated before this step)
   def set_cart
     @cart = current_user.cart
   end

@@ -134,36 +134,25 @@ class GuidesController < ApplicationController
 
   # POST /guides/checkout
   def checkout
-    @guide = Guide.find(params[:guide_id])
+    # Parse array of guide ids from JSON, map each id to an integer, and retrieve guides whose ids are included
+    @guides = Guide.where(id: JSON.parse(params[:guide_ids]).map(&:to_i))
+    # Prevent initiating purchase if any guide is already owned or is archived
+    return if @guides.any? { |guide| guide.owned_by?(current_user) || guide.discarded? }
+    # Add guide to library directly if params indicate a free guide is being acquired
     if params[:free]
-      add_to_library([@guide])
+      add_to_library(@guides)
       redirect_to owned_guides_path, notice: "Guide was added to your library!"
       return
     end
-    # Prevent initiating purchase if guide already owned or is archived
-    return false if @guide.owned_by?(current_user) || @guide.discarded?
+    # If not acquiring a free guide, initiate Stripe checkout
     # Set API key to access Stripe API
     Stripe.api_key = ENV['STRIPE_API_KEY']
+    # Generate array of line items in Stripe's required format
+    @line_items = generate_line_items(@guides)
     # Create Stripe session
     session = Stripe::Checkout::Session.create({
       payment_method_types: ['card'],
-      line_items: [
-        {
-        price_data: {
-          currency: 'aud',
-          # Pass through Guide title and id as part of Stripe session data
-          product_data: {
-            name: @guide.title,
-            metadata: {
-              id: @guide.id,
-            }
-          },
-          # Price (in cents) is 100 times the guides "price" attribute (stored in dollars as a decimal)
-          unit_amount: (@guide.price * 100).to_i,
-        },
-        quantity: 1
-      }
-    ],
+      line_items: @line_items,
       mode: 'payment',
       # These routes handle successful or canceled checkout
       success_url: "#{request.base_url}/guides/checkout-success?session_id={CHECKOUT_SESSION_ID}",
@@ -231,6 +220,26 @@ class GuidesController < ApplicationController
   def add_to_library(guides)
     guides.each do |guide|
       current_user.owned_guides.push(guide) unless guide.owned_by?(current_user)
+    end
+  end
+
+  # Given an array of guides, generate line items in Stripe's required format
+  def generate_line_items(guides)
+    return guides.map do |guide|
+      {
+        price_data: {
+          currency: 'aud',
+          product_data: {
+            name: guide.title,
+            metadata: {
+              id: guide.id,
+            }
+          },
+          # Price (in cents) is 100 times the guides "price" attribute (stored in dollars as a decimal)
+          unit_amount: (guide.price * 100).to_i,
+        },
+        quantity: 1
+      }
     end
   end
 end
