@@ -5,6 +5,7 @@ class CartsController < ApplicationController
   # GET /cart
   def show
     @cart_guides = @cart.cart_guides
+    @guides = @cart_guides.map(&:guide)
   end
 
   private

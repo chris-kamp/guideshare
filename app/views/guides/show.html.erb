@@ -21,10 +21,11 @@
       <% if @guide.price == 0 %>
         <%# Render "Add to library" button if guide is free %>
         <%= button_to "Add to Library", checkout_path, params: { free: true, guide_ids: [@guide.id] } %>
+      <%# If guide is not free, add to cart and buy now buttons may be rendered %>
       <% else %>
         <%# Creates form with hidden fields for "CartGuide". Posts to cart_guides#create, effectively adding a guide to user's cart. %>
         <% unless user_signed_in? && current_user.cart.guides.exists?(@guide.id) %>
-          <%= button_to "Add to cart", cart_guides_path, params: { cart_guide: { cart_id: user_signed_in? && current_user.cart.id, guide_ids: [@guide.id] } } %> | 
+          <%= button_to "Add to cart", cart_guides_path, params: { cart_guide: { cart_id: user_signed_in? && current_user.cart.id, guide_id: @guide.id } } %> | 
         <% end %>
         <%# Render stripe checkout button if guide is not free %>
         <button id="checkout-button">Buy Now</button>
@@ -79,6 +80,7 @@
       location = "<%= new_user_session_path %>"
     <% end %>
     // Create a new Checkout Session using the server-side endpoint
+    // Post guide ids for use as line items with the request
     fetch('/guides/checkout', {
       method: 'POST',
       headers: {

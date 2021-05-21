@@ -9,7 +9,50 @@
 <p>TOTAL: <%= @cart.total %></p>
 
 <p>
+  
+  <%# Render stripe checkout button if cart is not empty %>
+  <% unless @cart_guides.empty? %><button id="checkout-button">Check Out</button><% end %>
   <%# Link back to previous location if any (and not equal to current location), otherwise to guides index %>
-  <%# link_to :back not used as it links to current page if referer is current page %>
+  <%# link_to :back not used as it loops to current page if request came from the current page %>
   <%= link_to("Back", (request.referer.present? && request.referer != request.url) ? request.referer : guides_path) %>
 </p>
+
+<%# Add event listener to checkout button, triggering Stripe checkout %>
+<script type="text/javascript">
+  // Create an instance of the Stripe object with your publishable API key
+  var stripe = Stripe('pk_test_51IqT8pBOC4WaG3qlSthuQrdxLLJGwe4JWOzcVZvuC1Cpah4lypBOybTlhe5ZPGwZORLrxUgV6UNm3UmoshBrBu6F00Ra3xwDxj');
+  var checkoutButton = document.getElementById('checkout-button');
+
+  checkoutButton.addEventListener('click', function() {
+    // If user not signed in, send to sign in page and set the devise post-sign-in redirect page to the current url
+    <% if !user_signed_in? %>
+      <% session["user_return_to"] = request.url %>
+      location = "<%= new_user_session_path %>"
+    <% end %>
+    // Create a new Checkout Session using the server-side endpoint
+    // Post guide ids for use as line items with the request
+    fetch('/guides/checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'guide_ids': '<%= @guides.map(&:id) %>',
+      })
+    })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(session) {
+      return stripe.redirectToCheckout({ sessionId: session.id });
+    })
+    .then(function(result) {
+      if (result.error) {
+        alert(result.error.message);
+      }
+    })
+    .catch(function(error) {
+      console.error('Error:', error);
+    });
+  });
+</script>

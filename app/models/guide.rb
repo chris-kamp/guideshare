@@ -10,6 +10,7 @@ class Guide < ApplicationRecord
   has_many :guide_tags, dependent: :destroy
   has_many :tags, through: :guide_tags
   has_many :reviews, dependent: :destroy
+  has_many :cart_guides, dependent: :destroy
 
   validates :title,
             presence: true,
