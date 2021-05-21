@@ -134,8 +134,10 @@ class GuidesController < ApplicationController
 
   # POST /guides/checkout
   def checkout
-    # Parse array of guide ids from JSON, map each id to an integer, and retrieve guides whose ids are included
-    @guides = Guide.where(id: JSON.parse(params[:guide_ids]).map(&:to_i))
+    # Retrieve guide ids from params. If received as JSON (as with Stripe checkout button),
+    # first parse array of guide ids from JSON and map each id to an integer.
+    @guide_ids = params[:guide_ids].is_a?(String) ? JSON.parse(params[:guide_ids]).map(&:to_i) : params[:guide_ids]
+    @guides = Guide.where(id: @guide_ids)
     # Prevent initiating purchase if any guide is already owned or is archived
     return if @guides.any? { |guide| guide.owned_by?(current_user) || guide.discarded? }
     # Add guide to library directly if params indicate a free guide is being acquired
@@ -220,7 +222,14 @@ class GuidesController < ApplicationController
   def add_to_library(guides)
     guides.each do |guide|
       current_user.owned_guides.push(guide) unless guide.owned_by?(current_user)
+      remove_from_cart(guide)
     end
+  end
+
+  # Remove a guide from the current user's shopping cart (used to ensure purchased guides do not remain in the cart)
+  def remove_from_cart(guide)
+    return unless current_user.cart.guides.exists?(guide.id)
+    current_user.cart.cart_guides.find_by(guide_id: guide.id).destroy
   end
 
   # Given an array of guides, generate line items in Stripe's required format

@@ -1,3 +1,6 @@
+<%# Use Stripe for payment processing %>
+<script src="https://js.stripe.com/v3/"></script>
+
 <h1><%= @cart.user.username %>'s Shopping Cart</h1>
 <ol>
   <% @cart_guides.each do |cart_guide| %>
