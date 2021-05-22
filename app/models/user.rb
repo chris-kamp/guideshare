@@ -19,15 +19,23 @@ class User < ApplicationRecord
     owned_guides.exists?(guide.id)
   end
 
+  # Returns true if the user is the author of the passed guide
   def author?(guide)
     guides.exists?(guide.id)
   end
 
+  # Returns true if the user has already posted a review of the passed guide
   def reviewed?(guide)
     reviewed_guides.exists?(guide.id)
   end
   
+  # Returns the user's review of the passed guide, or nil if none exists
   def review(guide)
     reviews.find_by_guide_id(guide.id)
+  end
+
+  # Returns true if the passed guide is in the user's shopping cart, or false otherwise
+  def in_cart?(guide)
+    return cart.guides.exists?(guide.id)
   end
 end

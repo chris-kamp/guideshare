@@ -34,17 +34,6 @@ class Guide < ApplicationRecord
               message: 'must be less than 2 megabytes in size',
             }
 
-  # Returns the guide's description if not empty, or else "no description provided"
-  def description_text
-    return(
-      if description && !description.strip.empty?
-        description
-      else
-        'No description provided'
-      end
-    )
-  end
-
   # Get the number of pages in the attached PDF via a Cloudinary Admin API call.
   # Note page count is only accessible after file uploaded to Cloudinary, so can't be
   # set and stored in database using a callback on creation/update of guide object.
@@ -65,6 +54,16 @@ class Guide < ApplicationRecord
   # Returns true if guide has been purchased by any user
   def has_owners?
     return owners.exists?
+  end
+
+  # Returns the number of users who have purchased the guide
+  def owners_count
+    return owners.count
+  end
+
+  # Returns true if the guide has a price of zero, otherwise false
+  def free?
+    return price.zero?
   end
 
   # Returns the average rating for a guide, or "Not yet rated" if no reviews exist

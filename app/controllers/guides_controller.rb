@@ -253,4 +253,10 @@ class GuidesController < ApplicationController
       }
     end
   end
+
+  # Define "user" for Pundit with user_or_guest method, returning a null object if not logged in
+  def pundit_user
+    # Defined in application_controller
+    user_or_guest
+  end
 end

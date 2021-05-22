@@ -1,60 +1,36 @@
 <div class="container <%= "bg-light" if @guide.discarded? %>">
   <h1><%= @guide.title %></h1>
-  <% if user_signed_in? && @guide.owned_by?(current_user) %>
+  <% if user_or_guest.owns?(@guide) %>
     <h4 class="text-muted">Owned</h4>
   <% else %>
-    <h4 class="text-muted"><%= @guide.price == 0.0 ? "Free" : number_to_currency(@guide.price, locale: :en) %></h4>
+    <h4 class="text-muted"><%= display_price(@guide) %></h4>
   <% end %>
-  <h5 class="text-muted">Created by: <%= @guide.user.username %><%= " (you)" if user_signed_in? && current_user.author?(@guide) %></h5>
+  <h5 class="text-muted">Created by: <%= display_author(@guide) %></h5>
   <h5 class="card-subtitle mb-2 text-muted">Rating: <%= @guide.rating %></h5>
-  <p class="text-muted">Tags: <%= @guide.tags.map(&:name).join(", ") %></p>
-
+  <%# If user is the author, display how many others have purchased the guide %>
+  <% if user_or_guest.author?(@guide) %>
+    <p class="text-muted"><%= display_owners_count(@guide) %></p>
+  <% end %>
+  <p class="text-muted">Tags: <%= display_guide_tags(@guide) %></p>
   <hr>
-  <p><%= @guide.description_text %></p>
+  <p><%= description_text(@guide) %></p>
   <p>
-    <% if policy(@guide).view? %>
-      <%= link_to "View", view_guide_path(@guide) %>
-    <% else %>
-      <% if @guide.price == 0 %>
+    <% unless policy(@guide).view? %>
+      <% if @guide.free? %>
         <%# Render "Add to library" button if guide is free %>
         <%= button_to "Add to Library", checkout_path, params: { free: true, guide_ids: [@guide.id] } %>
       <%# If guide is not free, add to cart and buy now buttons may be rendered %>
       <% else %>
         <%# Creates form with hidden fields for "CartGuide". Posts to cart_guides#create, effectively adding a guide to user's cart. %>
-        <% unless user_signed_in? && current_user.cart.guides.exists?(@guide.id) %>
-          <%= button_to "Add to cart", cart_guides_path, params: { cart_guide: { cart_id: user_signed_in? && current_user.cart.id, guide_id: @guide.id } } %> | 
+        <% unless user_or_guest.in_cart?(@guide) %>
+          <%= button_to "Add to cart", cart_guides_path, params: { cart_guide: { cart_id: user_or_guest.cart.id, guide_id: @guide.id } } %> | 
         <% end %>
         <%# Render stripe checkout button if guide is not free %>
         <button id="checkout-button">Buy Now</button>
       <% end %>
     <% end %>
-    <%# If user owns the guide, link to create a new review, or to edit existing review if one already made %>
-    <% if @guide.owned_by?(current_user) %>
-      <% unless current_user.reviewed?(@guide) %>
-        |<%= link_to("Review", new_guide_review_path(guide_id: @guide.id)) %>
-      <% else %>
-        |<%= link_to("Edit Review", edit_review_path(current_user.review(@guide))) %>
-      <% end %>
-    <% end %>
-    <% if policy(@guide).edit? %>
-      |<%= link_to "Edit", edit_guide_path(@guide) %>
-    <% end %>
-    <% if policy(@guide).destroy? %>
-      <%# Delete link disabled with explanatory tooltip if a guide has been purchased by one or more users %>
-      <% if @guide.has_owners? %>
-        |<div class="d-inline-block" data-toggle="tooltip" data-placement="bottom" title="Guides that have been purchased by users can only be archived, not deleted.">
-          <%= link_to "Delete", guide_path(@guide), method: :delete, class: "btn btn-secondary disabled", data: {confirm: "Are you sure?"} %>
-        </div>
-      <% else %>
-        |<%= link_to "Delete", guide_path(@guide), method: :delete, class: "btn btn-secondary", data: {confirm: "Are you sure?"} %>
-      <% end %>
-    <% end %>
-    <% if policy(@guide).archive? %>
-      |<%= link_to "Archive", archive_guide_path(@guide), data: {confirm: "Are you sure?"} %>
-    <% elsif policy(@guide).restore? %>
-      |<%= link_to "Restore", restore_guide_path(@guide), data: {confirm: "Are you sure?"} %>
-    <% end %>
   </p>
+  <%= render partial: "links", locals: { guide: @guide } %>
   <h4>Reviews</h4>
   <hr>
   <% @reviews.each do |review| %>
@@ -64,4 +40,4 @@
   <p><%= link_to "Back to guides", guides_path %></p>
 </div>
 
-<%= render(partial: "shared/stripe", locals: {guide_ids: [@guide.id]}) unless (policy(@guide).view? || @guide.price == 0) %>
+<%= render(partial: "shared/stripe", locals: {guide_ids: [@guide.id]}) unless (policy(@guide).view? || @guide.free?) %>
