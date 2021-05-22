@@ -9,7 +9,7 @@
     <h6 class="card-subtitle mb-2 text-muted">Created by: <%= guide.user.username %><%= " (you)" if user_signed_in? && current_user.author?(guide) %></h6>
     <h5 class="card-subtitle mb-2 text-muted">Rating: <%= guide.rating %></h5>
     <% if user_signed_in? && current_user.author?(guide) %>
-      <p class="text-muted"><%= guide.owners.length %> users have purchased this guide</p>
+      <p class="text-muted"><%= "#{pluralize(guide.owners.length, "user")} #{'has'.pluralize(guide.owners.length)}" %> purchased this guide</p>
     <% end %>
     <p class="text-muted">Tags: <%= guide.tags.map(&:name).join(", ") %></p>
 

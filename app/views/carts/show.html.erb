@@ -5,7 +5,7 @@
 <ol>
   <% @cart_guides.each do |cart_guide| %>
     <li>
-      Title: <%= cart_guide.guide.title %> | Price: <%= cart_guide.guide.price %> | <%= button_to "Remove", cart_guide_path(cart_guide), method: :delete %> |
+      Title: <%= cart_guide.guide.title %> | Price: <%=number_to_currency(cart_guide.guide.price, locale: :en) %> | <%= button_to "Remove", cart_guide_path(cart_guide), method: :delete %> |
     </li>
   <% end %>
 <ol>

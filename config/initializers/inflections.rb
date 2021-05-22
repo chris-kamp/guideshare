@@ -14,3 +14,8 @@
 # ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.acronym 'RESTful'
 # end
+
+# Add support for custom inflection "has" / "have" for pluralize method
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.irregular "has", "have"
+end
