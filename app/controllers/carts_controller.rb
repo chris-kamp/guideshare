@@ -6,6 +6,7 @@ class CartsController < ApplicationController
   def show
     @cart_guides = @cart.cart_guides
     @guides = @cart_guides.map(&:guide)
+    @guide_ids = @guides.map(&:id)
   end
 
   private
