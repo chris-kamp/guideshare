@@ -1,42 +1,50 @@
-<%# Use Stripe for payment processing %>
-<script src="https://js.stripe.com/v3/"></script>
+
 
 <%# Add event listener to purchase button, triggering Stripe checkout %>
 <script type="text/javascript">
-  // Create an instance of the Stripe object with your publishable API key
-  var stripe = Stripe('pk_test_51IqT8pBOC4WaG3qlSthuQrdxLLJGwe4JWOzcVZvuC1Cpah4lypBOybTlhe5ZPGwZORLrxUgV6UNm3UmoshBrBu6F00Ra3xwDxj');
-  var checkoutButton = document.getElementById('checkout-button');
+  function addStripe() {
+    // Abort if checkout button not found on page
+    if (!document.getElementById('checkout-button')) {
+      return;
+    }
+    // Create an instance of the Stripe object with your publishable API key
+    var stripe = Stripe('pk_test_51IqT8pBOC4WaG3qlSthuQrdxLLJGwe4JWOzcVZvuC1Cpah4lypBOybTlhe5ZPGwZORLrxUgV6UNm3UmoshBrBu6F00Ra3xwDxj');
+    var checkoutButton = document.getElementById('checkout-button');
 
-  checkoutButton.addEventListener('click', function() {
-    // If user not signed in, send to sign in page and set the devise post-sign-in redirect page to the current url
-    <% if !user_signed_in? %>
-      <% session["user_return_to"] = request.url %>
-      location = "<%= new_user_session_path %>"
-    <% end %>
-    // Create a new Checkout Session using the server-side endpoint
-    // Post guide ids for use as line items with the request
-    fetch('/guides/checkout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        'guide_ids': '<%= guide_ids %>',
+    checkoutButton.addEventListener('click', function() {
+      // If user not signed in, send to sign in page and set the devise post-sign-in redirect page to the current url
+      <% if !user_signed_in? %>
+        <% session["user_return_to"] = request.url %>
+        location = "<%= new_user_session_path %>"
+      <% end %>
+      // Create a new Checkout Session using the server-side endpoint
+      // Post guide ids for use as line items with the request
+      fetch('/guides/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          'guide_ids': '<%= guide_ids %>',
+        })
       })
-    })
-    .then(function(response) {
-      return response.json();
-    })
-    .then(function(session) {
-      return stripe.redirectToCheckout({ sessionId: session.id });
-    })
-    .then(function(result) {
-      if (result.error) {
-        alert(result.error.message);
-      }
-    })
-    .catch(function(error) {
-      console.error('Error:', error);
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(session) {
+        return stripe.redirectToCheckout({ sessionId: session.id });
+      })
+      .then(function(result) {
+        if (result.error) {
+          alert(result.error.message);
+        }
+      })
+      .catch(function(error) {
+        console.error('Error:', error);
+      });
     });
-  });
+  };
+
+  document.addEventListener('turbolinks:load', addStripe);
+
 </script>
