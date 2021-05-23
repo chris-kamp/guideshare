@@ -34,9 +34,14 @@ class Guide < ApplicationRecord
               message: 'must be less than 2 megabytes in size',
             }
 
-  # Get the number of pages in the attached PDF via a Cloudinary Admin API call.
-  # Note page count is only accessible after file uploaded to Cloudinary, so can't be
-  # set and stored in database using a callback on creation/update of guide object.
+  # Scope for all guides whose titles match a query using case-insensitive wildcard search
+  scope :title_matches_query, ->(query) { where("title ILIKE ?", "%#{query}%") }
+  # Scope for all distinct guides whose tags include ANY of a given array of tag ids
+  scope :has_any_tag, ->(tag_ids) { joins(:tags).where("tags.id IN (?)", tag_ids).distinct }
+  # Scope for all guides whose tags include ALL of a given array of tag ids
+  scope :has_all_tags, ->(tag_ids) { joins(:tags).where("tags.id IN (?)", tag_ids).group("guides.id").having("COUNT(guides.id) >= ?", tag_ids.count) }
+
+  # Get the number of pages in the attached PDF via a Cloudinary API call.
   def get_page_count
     Cloudinary::Api.resource(guide_file.key, :pages => true)['pages'].to_i
   end
