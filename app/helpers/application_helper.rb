@@ -33,4 +33,9 @@ module ApplicationHelper
     back = request.referer.present? && request.referer != request.url ? request.referer : fallback
     return link_to("Back", back)
   end
+
+  # Given a guide rating, format it for display
+  def display_rating(rating)
+    return rating.nil? ? "Free" : number_with_precision(rating, precision: 2)
+  end
 end

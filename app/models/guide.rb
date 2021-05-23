@@ -77,6 +77,6 @@ class Guide < ApplicationRecord
 
   # Returns the average rating for a guide, or "Not yet rated" if no reviews exist
   def rating
-    return reviews.exists? ? reviews.average(:rating) : "Not yet rated"
+    return reviews.exists? ? reviews.average(:rating) : nil
   end
 end
