@@ -26,7 +26,7 @@ class CartGuidesController < ApplicationController
   # Remove all items from current user's cart
   def destroy_all
     # Select all guides belonging to the current user (noting user authentication occurs before action)
-    @cart_guides = current_user.cart.cart_guides
+    @cart_guides = CartGuide.in_cart_of(current_user)
     @cart_guides.destroy_all
     redirect_to cart_url, notice: 'All items cleared from cart.'
   end

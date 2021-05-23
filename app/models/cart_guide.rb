@@ -7,6 +7,9 @@ class CartGuide < ApplicationRecord
 
   # Selects all CartGuides relating to a given guide
   scope :for_guide, ->(guide) { where(guide: guide) }
+  # Selects all CartGuides in a given user's cart
+  scope :in_cart_of, ->(user) { where(cart: user.cart) }
+
 
   # Get the title of the guide to which the cart_guide relates
   def title

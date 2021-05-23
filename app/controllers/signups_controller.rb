@@ -1,4 +1,4 @@
-# Extends devise registrations controller to provide added functionality
+# Extends devise registrations controller to modify behaviour
 class SignupsController < Devise::RegistrationsController
   # Overwrite "new" registration method to build shopping cart for user upon signup
   def new

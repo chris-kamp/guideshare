@@ -42,6 +42,8 @@ class Guide < ApplicationRecord
   scope :has_all_tags, ->(tag_ids) { joins(:tags).where("tags.id IN (?)", tag_ids).group("guides.id").having("COUNT(guides.id) >= ?", tag_ids.count) }
   # Selects guides published by a given user
   scope :published_by, ->(user) { where(user: user) }
+  # Selects guides in a given shopping cart
+  scope :in_cart, ->(cart) { joins(:cart_guides).where("cart_guides.cart_id = ?", cart.id) }
 
   # Get the number of pages in the attached PDF via a Cloudinary API call.
   def get_page_count

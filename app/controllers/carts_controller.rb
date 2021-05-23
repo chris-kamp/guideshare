@@ -5,7 +5,7 @@ class CartsController < ApplicationController
   # GET /cart
   def show
     @cart_guides = @cart.cart_guides
-    @guides = @cart_guides.map(&:guide).map(&:id)
+    @guide_ids = Guide.in_cart(@cart).pluck(:id)
   end
 
   private
