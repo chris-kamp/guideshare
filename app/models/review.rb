@@ -6,4 +6,9 @@ class Review < ApplicationRecord
   validates :content, length: { maximum: 300 }
   # Ensure no more than one review per user per guide is present
   validates_uniqueness_of :user_id, scope: :guide_id
+
+  # Get the username of the review's author
+  def user_name
+    return user.username
+  end
 end

@@ -1,16 +1,16 @@
-  <%# Form created using simple form gem with bootstrap styles integration. %>
-  <%= simple_form_for([@guide, @review], wrapper: :horizontal_form) do |f| %>
-    <%= f.error_notification %>
-  
-    <div class="form-inputs">
-      <%# Simple form automatically determines input type based on the specified attribute, and generates label and input field. %>
-      <%= f.input :content, wrapper_html: {class: "mb-5"} %>
-      <%= f.input :rating, wrapper_html: {class: "mb-5"} %>
-      <%# Hidden field to pass through ID of guide to which the review belongs %>
-      <%= f.input :guide_id, as: :hidden %>
-    </div>
-  
-    <div class="form-actions">
-      <%= f.button :submit, class: "btn-primary"%>
-    </div>
-  <% end %>
+<%# Form created using simple form gem with bootstrap styles integration. %>
+<%= simple_form_for([@guide, @review], wrapper: :horizontal_form) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%# Simple form automatically determines input type based on the specified attribute, and generates label and input field. %>
+    <%= f.input :content, wrapper_html: {class: "mb-5"} %>
+    <%= f.input :rating, wrapper_html: {class: "mb-5"} %>
+    <%# Hidden field to pass through ID of guide to which the review belongs %>
+    <%= f.input :guide_id, as: :hidden %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: "btn-primary"%>
+  </div>
+<% end %>
