@@ -13,5 +13,5 @@
   <%# Back link using custom link_back helper %>
   <%= link_back(guides_path) %>
 </p>
-<%# Include Stripe script tags %>
-<%= render partial: "shared/stripe", locals: { guide_ids: @guide_ids }%>
+<%# Include Stripe script tags if cart is not empty (in which case checkout button will be present) %>
+<%= render partial: "shared/stripe", locals: { guide_ids: @guide_ids } unless @cart_guides.empty? %>

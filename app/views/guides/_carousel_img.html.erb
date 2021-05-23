@@ -1,0 +1,5 @@
+<div class='<%= page_num == 1 ? "carousel-item active" : "carousel-item" %>'>
+  <span class="d-flex justify-content-center"><%= page_num %></span>
+  <%# Retrieve image of page from Cloudinary %>
+  <%= cl_image_tag "#{@guide.guide_file.key}.png", cloud_name: "chriskamp", page: page_num, class: "d-block w-100 img-fluid" %>
+</div>

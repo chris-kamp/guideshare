@@ -1,4 +1,4 @@
-  <div class="d-flex flex-wrap flex">
+  <div class=" container d-flex flex-wrap justify-content-between p-0">
     <% @guides.each do |guide| %>
       <%= render partial: "card", locals: {guide: guide} %>
     <% end %>

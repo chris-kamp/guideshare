@@ -4,26 +4,11 @@
 
 <div id="guideCarousel" class="carousel slide carousel-dark" data-bs-ride="carousel" data-bs-interval="false" data-bs-wrap="false">
   <div class="carousel-inner">
-    <%# For each page in the guide pdf, insert image of page into carousel %>
+    <%# For each page in the guide pdf, display image of page in the carousel %>
     <% for page_num in (1..@page_count) do %>
-      <div class='<%= page_num == 1 ? "carousel-item active" : "carousel-item" %>'>
-        <span class="d-flex justify-content-center"><%= page_num %></span>
-        <%# Retrieve image of page from Cloudinary %>
-        <%= cl_image_tag "#{@guide.guide_file.key}.png", cloud_name: "chriskamp", page: page_num, class: "d-block w-100 img-fluid" %>
-      </div>
+      <%= render partial: "carousel_img", locals: { page_num: page_num } %>
     <% end %>
   </div>
-  <div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#guideCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-  </div>
-  <div>
-    <button class="carousel-control-next" type="button" data-bs-target="#guideCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
+  <%= render "carousel_controls" %>
 </div>
 
