@@ -23,7 +23,7 @@ class GuidesController < ApplicationController
   # GET /guides/dashboard
   def dashboard
     # Retrieve all guides of which the current user is the author
-    @guides = current_user.guides
+    @guides = Guide.published_by(current_user)
   end
 
   # GET /guides/:id
@@ -32,7 +32,7 @@ class GuidesController < ApplicationController
     # If user not authorised, redirect to show page and alert error.
     authorize_guide(@guide, "Guide does not exist or you are not authorised to view it", guides_path)
     # Select the most recent 3 reviews to display
-    @reviews = @guide.reviews.order(created_at: :desc).limit(3)
+    @reviews = @guide.reviews.recent(3)
   end
 
   # GET/guides/:id/view
@@ -105,7 +105,7 @@ class GuidesController < ApplicationController
     # Only the author and users who have already purchased the guide will be able to access it.
     @guide.discard
     # Dependents are not destroyed when discarding, so manually remove discarded guides from all users' shopping carts
-    CartGuide.where(guide_id: @guide.id).destroy_all
+    CartGuide.for_guide(@guide).destroy_all
     redirect_to guides_url, notice: 'Guide listing was successfully archived. NOTE: Any users who already purchased the guide will retain access to it.'
   end
 
@@ -120,9 +120,10 @@ class GuidesController < ApplicationController
 
   # POST /guides/checkout
   def checkout
-    # Retrieve guide ids from params. If received as JSON (as with Stripe checkout button),
+    # Retrieve guide ids from params. If received as JSON (such as from Stripe checkout button),
     # first parse array of guide ids from JSON and map each id to an integer.
     @guide_ids = params[:guide_ids].is_a?(String) ? JSON.parse(params[:guide_ids]).map(&:to_i) : params[:guide_ids]
+    # Select guides whose ids are included in the guide_ids received as params
     @guides = Guide.where(id: @guide_ids)
     # Prevent initiating purchase if any guide is already owned or is archived
     return if @guides.any? { |guide| guide.owned_by?(current_user) || guide.discarded? }
@@ -161,7 +162,7 @@ class GuidesController < ApplicationController
     @guide_ids = @line_items_data.map { |item| Stripe::Product.retrieve(item['price']['product'])['metadata']['id'] }
     # Select only those guides whose ids are included in the line items data
     @guides = Guide.where(id: @guide_ids)
-    # Add each purchased guides to owned guides, unless already present
+    # Add each purchased guide to owned guides, unless already present
     add_to_library(@guides)
     redirect_to owned_guides_path, notice: "Thank you for your purchase!"
   end
@@ -188,6 +189,12 @@ class GuidesController < ApplicationController
   # Get guide attributes from params hash with strong parameters
   def guide_params
     params.require(:guide).permit(:title, :description, :price, :guide_file)
+  end
+
+  # Define "user" for Pundit with user_or_guest method, returning a null object if not logged in
+  def pundit_user
+    # Defined in application_controller
+    user_or_guest
   end
 
   # Check if user authorised to access a given guide.
@@ -236,12 +243,6 @@ class GuidesController < ApplicationController
         quantity: 1
       }
     end
-  end
-
-  # Define "user" for Pundit with user_or_guest method, returning a null object if not logged in
-  def pundit_user
-    # Defined in application_controller
-    user_or_guest
   end
 
   # Apply search filters to a collection of guides, and return the filtered collection

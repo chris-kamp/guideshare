@@ -34,12 +34,14 @@ class Guide < ApplicationRecord
               message: 'must be less than 2 megabytes in size',
             }
 
-  # Scope for all guides whose titles match a query using case-insensitive wildcard search
+  # Selects all guides whose titles match a query using case-insensitive wildcard search
   scope :title_matches_query, ->(query) { where("title ILIKE ?", "%#{query}%") }
-  # Scope for all distinct guides whose tags include ANY of a given array of tag ids
+  # Selects all distinct guides whose tags include ANY of a given array of tag ids
   scope :has_any_tag, ->(tag_ids) { joins(:tags).where("tags.id IN (?)", tag_ids).distinct }
-  # Scope for all guides whose tags include ALL of a given array of tag ids
+  # Selects all guides whose tags include ALL of a given array of tag ids
   scope :has_all_tags, ->(tag_ids) { joins(:tags).where("tags.id IN (?)", tag_ids).group("guides.id").having("COUNT(guides.id) >= ?", tag_ids.count) }
+  # Selects guides published by a given user
+  scope :published_by, ->(user) { where(user: user) }
 
   # Get the number of pages in the attached PDF via a Cloudinary API call.
   def get_page_count

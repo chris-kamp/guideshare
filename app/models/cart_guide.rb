@@ -5,6 +5,9 @@ class CartGuide < ApplicationRecord
   # Ensure a given guide can only be added to a given cart once
   validates_uniqueness_of :guide_id, scope: :cart_id
 
+  # Selects all CartGuides relating to a given guide
+  scope :for_guide, ->(guide) { where(guide: guide) }
+
   # Get the title of the guide to which the cart_guide relates
   def title
     return guide.title
