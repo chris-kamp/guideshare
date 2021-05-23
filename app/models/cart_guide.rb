@@ -4,4 +4,14 @@ class CartGuide < ApplicationRecord
 
   # Ensure a given guide can only be added to a given cart once
   validates_uniqueness_of :guide_id, scope: :cart_id
+
+  # Get the title of the guide to which the cart_guide relates
+  def title
+    return guide.title
+  end
+
+  # Get the price of the guide to which the cart_guide relates
+  def price
+    return guide.price
+  end
 end

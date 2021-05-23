@@ -1,21 +1,17 @@
-<h1><%= @cart.user.username %>'s Shopping Cart</h1>
+<h1><%= @cart.user_name %>'s Shopping Cart</h1>
+<%# Display partial for each item in the cart, in an ordered list %>
 <ol>
   <% @cart_guides.each do |cart_guide| %>
-    <li>
-      Title: <%= cart_guide.guide.title %> | Price: <%=number_to_currency(cart_guide.guide.price, locale: :en) %> | <%= button_to "Remove", cart_guide_path(cart_guide), method: :delete %> |
-    </li>
+    <%= render partial: "cart_guide", locals: {cart_guide: cart_guide} %>
   <% end %>
 <ol>
+<%# Display cart total %>
 <p>TOTAL: <%= @cart.total %></p>
 <p>
-  <%# Render stripe checkout button if cart is not empty %>
-  <% unless @cart_guides.empty? %>
-    <button id="checkout-button">Check Out</button> | 
-    <%= button_to "Clear Cart", clear_cart_path, method: :delete, data: {confirm: "Are you sure?"} %>
-  <% end %>
-  <%# Link back to previous location if any (and not equal to current location), otherwise to guides index %>
-  <%# link_to :back not used as it loops to current page if request came from the current page %>
-  <%= link_to("Back", (request.referer.present? && request.referer != request.url) ? request.referer : guides_path) %>
+  <%# Render stripe checkout and clear cart buttons if cart is not empty %>
+  <%= render "buttons" unless @cart_guides.empty? %>
+  <%# Back link using custom link_back helper %>
+  <%= link_back(guides_path) %>
 </p>
-
+<%# Include Stripe script tags %>
 <%= render partial: "shared/stripe", locals: { guide_ids: @guide_ids }%>

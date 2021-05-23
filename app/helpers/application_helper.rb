@@ -26,4 +26,11 @@ module ApplicationHelper
     users = guide.owners_count
     return "#{pluralize(users, 'user')} #{'has'.pluralize(users)} purchased this guide"
   end
+
+  # If referer location is set and is not the current page (to avoid infinite loop), link to it.
+  # Otherwise, link to a given fallback location.
+  def link_back(fallback)
+    back = request.referer.present? && request.referer != request.url ? request.referer : fallback
+    return link_to("Back", back)
+  end
 end
