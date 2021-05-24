@@ -182,8 +182,8 @@ class GuidesController < ApplicationController
     # Prevent initiating purchase if any guide is already owned by the user, or is archived
     return if @guides.any? { |guide| guide.owned_by?(current_user) || guide.discarded? }
 
-    # "Free" param will be true only if the user is attempting to add a single free guide to their library.
-    # If so, add the guide to the user's library directly and redirect to the user's library with a success notice.
+    # "Free" param will be true only if the user is attempting to add a single free guide to their library. If so,
+    # add the guide to the user's library directly, redirect to the user's library with a success notice, and return.
     if params[:free]
       add_to_library(@guides)
       redirect_to owned_guides_path, notice: 'Guide was added to your library!'
@@ -349,4 +349,5 @@ class GuidesController < ApplicationController
     end
     return filtered_guides
   end
+
 end

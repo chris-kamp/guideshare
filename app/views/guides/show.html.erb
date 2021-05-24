@@ -23,7 +23,7 @@
     <% unless policy(@guide).view? %>
       <%# Render "Add to library" button if guide is free %>
       <% if @guide.free? %>
-        <%= button_to "Add to Library", checkout_path, params: { free: true, guide_ids: [@guide.id] } %>
+        <%= button_to "Add to Library", checkout_path, params: { free: true, guide_ids: [@guide.id] }, id: "add-to-lib" %>
       <%# If guide is not free, add to cart and buy now buttons may be rendered %>
       <% else %>
         <%# Display Add To Cart if not already in cart %>
@@ -49,3 +49,5 @@
 </div>
 <%# Include Stripe script tags if guide is not viewable or free (in which case Buy Now button will be present) %>
 <%= render(partial: "shared/stripe", locals: {guide_ids: [@guide.id]}) unless (policy(@guide).view? || @guide.free?) %>
+<%# Include script which causes the "Add to Library" button to redirect to sign-in page if user is not signed in %>
+<%= render "add_to_lib_script" %>
