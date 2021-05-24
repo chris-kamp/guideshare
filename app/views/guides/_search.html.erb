@@ -1,9 +1,9 @@
-  <div class="container mb-5 p-3 border">
-    <%= simple_form_for :search, url: guides_path, method: "GET", html: { class: 'form-inline' } do |f| %>
-      <%= f.input :query, input_html: {value: ""}, label: "Search by title", required: false %>
-      <%= f.input :tags, as: :check_boxes, collection: @tags, label_method: :name, value_method: :id, input_html: {value: ""}, label: "Select tags", required: false, wrapper: :horizontal_collection_inline %>
-      <%= f.input :tags_match, as: :radio_buttons, collection: [[0, "Any"], [1, "All"]], checked: 0, label_method: :second, value_method: :first, prompt: "Match tags:", required: false, wrapper: :horizontal_collection_inline %>
-      <br>
-      <%= f.submit "Search", class: "btn btn-primary" %>
-    <% end %>
-  </div>
+<div class="container mb-5 p-3 border">
+  <%= simple_form_for :search, url: guides_path, method: "GET", html: { class: 'form-inline' } do |f| %>
+    <%= f.input :query, input_html: {value: ""}, label: "Search by title", required: false %>
+    <%= f.input :tags, as: :check_boxes, collection: @tags, label_method: :name, value_method: :id, input_html: {value: ""}, label: "Select tags", required: false, wrapper: :horizontal_collection_inline %>
+    <%= f.input :tags_match, as: :radio_buttons, collection: [[0, "Any"], [1, "All"]], checked: 0, label_method: :second, value_method: :first, prompt: "Match tags:", required: false, wrapper: :horizontal_collection_inline %>
+    <br>
+    <%= f.submit "Search", class: "btn btn-primary" %>
+  <% end %>
+</div>

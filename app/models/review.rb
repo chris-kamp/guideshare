@@ -7,7 +7,8 @@ class Review < ApplicationRecord
   # Ensure no more than one review per user per guide is present
   validates_uniqueness_of :user_id, scope: :guide_id
 
-  # Selects the most recent reviews, up to a limit of num_items
+  # Selects the most recent reviews, up to a limit of num_items. First orders Reviews in descending order of
+  # creation date, and limits the number of results to the value of num_items.
   scope :recent, ->(num_items) { order(created_at: :desc).limit(num_items) }
 
   # Get the username of the review's author

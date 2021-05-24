@@ -1,23 +1,23 @@
-  <%# Form created using simple form gem with bootstrap styles integration. %>
-  <%# Maps non-text fields to relevant bootstrap classes with wrapper_mappings. %>
-  <%= simple_form_for @guide, wrapper: :horizontal_form, wrapper_mappings: {
-    file: :horizontal_file, check_boxes: :horizontal_collection_inline
-  } do |f| %>
-    <%= f.error_notification %>
-  
-    <div class="form-inputs">
-      <%# Simple form automatically determines input type based on the specified attribute, and generates label and input field. %>
-      <%= f.input :title,
-                  required: true,
-                  autofocus: true, wrapper_html: {class: "mt-5 mb-5"} %>
-      <%= f.input :description, wrapper_html: {class: "mb-5"} %>
-      <%= f.input :price, wrapper_html: {class: "mb-5"}, input_html: {step: 0.01} %>
-      <%# Create checkboxes for each tag in @guide.tags %>
-      <%= f.association :tags, as: :check_boxes, wrapper_html: {class: "mb-5"} %>
-      <%= f.input :guide_file, wrapper_html: {class: "mb-5"} %>
-    </div>
-  
-    <div class="form-actions">
-      <%= f.button :submit, class: "btn-primary"%>
-    </div>
-  <% end %>
+<%# Form created using simple form gem with bootstrap styles integration. %>
+<%# Maps non-text fields to relevant bootstrap classes with wrapper_mappings. %>
+<%= simple_form_for @guide, wrapper: :horizontal_form, wrapper_mappings: {
+  file: :horizontal_file, check_boxes: :horizontal_collection_inline
+} do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%# Simple form automatically determines input type based on the specified attribute, and generates label and input field. %>
+    <%= f.input :title,
+                required: true,
+                autofocus: true, wrapper_html: {class: "mt-5 mb-5"} %>
+    <%= f.input :description, wrapper_html: {class: "mb-5"} %>
+    <%= f.input :price, wrapper_html: {class: "mb-5"}, input_html: {step: 0.01} %>
+    <%# Create checkboxes for each tag in @guide.tags %>
+    <%= f.association :tags, as: :check_boxes, wrapper_html: {class: "mb-5"} %>
+    <%= f.input :guide_file, wrapper_html: {class: "mb-5"} %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: "btn-primary"%>
+  </div>
+<% end %>
