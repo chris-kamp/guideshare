@@ -8,7 +8,7 @@ class GuidesController < ApplicationController
     # Retrieve tags for use in checkboxes
     @tags = Tag.all
     # Retrieve guides for display. Use "kept" (from discard gem) to retrieve only those that have not been archived.
-    @guides = Guide.kept
+    @guides = Guide.includes([:user, :tags, :guide_tags]).kept
     # If search was used, extract search params
     if params["search"].present?
       @query = params["search"]["query"]
@@ -23,7 +23,7 @@ class GuidesController < ApplicationController
   # GET /guides/dashboard
   def dashboard
     # Retrieve all guides of which the current user is the author
-    @guides = Guide.published_by(current_user)
+    @guides = Guide.includes(:user, :guide_tags, :tags).published_by(current_user)
   end
 
   # GET /guides/:id
@@ -32,7 +32,7 @@ class GuidesController < ApplicationController
     # If user not authorised, redirect to show page and alert error.
     authorize_guide(@guide, "Guide does not exist or you are not authorised to view it", guides_path)
     # Select the most recent 3 reviews to display
-    @reviews = @guide.reviews.recent(3)
+    @reviews = @guide.reviews.includes(:user).recent(3)
   end
 
   # GET/guides/:id/view
@@ -176,7 +176,7 @@ class GuidesController < ApplicationController
   # GET /guides/owned
   # Display all guides owned (purchased) by the current user
   def owned
-    @guides = current_user.owned_guides
+    @guides = current_user.owned_guides.includes(:user, :guide_tags, :tags)
   end
 
   private

@@ -6,7 +6,7 @@ class ReviewsController < ApplicationController
   # GET /guides/:guide_id/reviews
   def index
     # Retrieve only those reviews belonging to the relevant guide for display
-    @reviews = @guide.reviews
+    @reviews = @guide.reviews.includes(:user)
   end
 
   # GET /guides/:guide_id/reviews/new

@@ -34,6 +34,55 @@ devtester =
     password: ENV['SEED_DEVTESTER_PASSWORD'],
     cart: Cart.new
   )
+anon1 =
+  User.create(
+    email: 'anon1@anon1.com',
+    username: 'anon1',
+    password: "anon1aaa",
+    cart: Cart.new
+  )
+anon2 =
+  User.create(
+    email: 'anon2@anon2.com',
+    username: 'anon2',
+    password: "anon1aaa",
+    cart: Cart.new
+  )
+anon3 =
+  User.create(
+    email: 'anon3@anon3.com',
+    username: 'anon3',
+    password: "anon1aaa",
+    cart: Cart.new
+  )
+anon4 =
+  User.create(
+    email: 'anon4@anon4.com',
+    username: 'anon4',
+    password: "anon1aaa",
+    cart: Cart.new
+  )
+anon5 =
+  User.create(
+    email: 'anon5@anon5.com',
+    username: 'anon5',
+    password: "anon1aaa",
+    cart: Cart.new
+  )
+anon6 =
+  User.create(
+    email: 'anon6@anon6.com',
+    username: 'anon6',
+    password: "anon1aaa",
+    cart: Cart.new
+  )
+anon7 =
+  User.create(
+    email: 'anon7@anon7.com',
+    username: 'anon7',
+    password: "anon1aaa",
+    cart: Cart.new
+  )
 
 # Seed tags
 
@@ -155,3 +204,11 @@ devtester.guides.create(
     },
   ],
 )
+
+devtester.guides.first.reviews.create(content: "Anon 1's review", rating: 5, user: anon1)
+devtester.guides.first.reviews.create(content: "Anon 2's review", rating: 2, user: anon2)
+devtester.guides.first.reviews.create(content: "Anon 3's review", rating: 3, user: anon3)
+devtester.guides.first.reviews.create(content: "Anon 4's review", rating: 4, user: anon4)
+devtester.guides.first.reviews.create(content: "Anon 5's review", rating: 5, user: anon5)
+devtester.guides.first.reviews.create(content: "Anon 6's review", rating: 0, user: anon6)
+devtester.guides.first.reviews.create(content: "Anon 7's review", rating: 2, user: anon7)

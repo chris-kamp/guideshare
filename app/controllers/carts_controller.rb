@@ -4,7 +4,7 @@ class CartsController < ApplicationController
 
   # GET /cart
   def show
-    @cart_guides = @cart.cart_guides
+    @cart_guides = @cart.cart_guides.includes(:guide)
     @guide_ids = Guide.in_cart(@cart).pluck(:id)
   end
 

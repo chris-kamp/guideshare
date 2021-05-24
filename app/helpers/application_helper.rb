@@ -36,6 +36,6 @@ module ApplicationHelper
 
   # Given a guide rating, format it for display
   def display_rating(rating)
-    return rating.nil? ? "Free" : number_with_precision(rating, precision: 2)
+    return rating.nil? ? "Not yet rated" : number_with_precision(rating, precision: 2)
   end
 end
