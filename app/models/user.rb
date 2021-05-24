@@ -18,16 +18,6 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :cart
 
-  # Returns true if the user owns the passed guide
-  def owns?(guide)
-    owned_guides.exists?(guide.id)
-  end
-
-  # Returns true if the user is the author of the passed guide
-  def author?(guide)
-    guides.exists?(guide.id)
-  end
-
   # Returns true if the user has already posted a review of the passed guide
   def reviewed?(guide)
     reviewed_guides.exists?(guide.id)

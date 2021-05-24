@@ -86,11 +86,6 @@ class Guide < ApplicationRecord
     return owner && owners.exists?(owner.id)
   end
 
-  # Get the username of the user who created the guide
-  def author_name
-    return user.username
-  end
-
   # Returns true if the guide was authored by the given user
   def authored_by?(user_obj)
     return user == user_obj
