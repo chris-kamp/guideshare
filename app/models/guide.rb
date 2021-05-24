@@ -34,8 +34,9 @@ class Guide < ApplicationRecord
               message: 'must be less than 2 megabytes in size',
             }
 
-  # Selects all guides whose titles match a query using case-insensitive wildcard search
-  scope :title_matches_query, ->(query) { where("title ILIKE ?", "%#{query}%") }
+  # Selects all guides whose titles match a query using case-insensitive wildcard search. Because input from params
+  # is used in query via interpolation, manually sanitise with "sanitize_sql_like" helper to prevent SQL injection.
+  scope :title_matches_query, ->(query) { where("title ILIKE ?", "%#{sanitize_sql_like(query)}%") }
   # Selects all distinct guides whose tags include ANY of a given array of tag ids
   scope :has_any_tag, ->(tag_ids) { joins(:tags).where("tags.id IN (?)", tag_ids).distinct }
   # Selects all guides whose tags include ALL of a given array of tag ids
