@@ -5,7 +5,7 @@ class ReviewPolicy < ApplicationPolicy
 
   # Authorize creation of review only if valid guide id provided and user owns that guide
   def create?
-    Guide.exists?(record.guide_id) && user.owns?(record.guide)
+    Guide.exists?(record.guide_id) && record.guide.owned_by?(user)
   end
   
   def edit?

@@ -3,7 +3,7 @@
   <%= link_to "Read Now", view_guide_path(guide), class: "card-link" %>
 <% end %>
 <%# If user owns the guide, provide link to post a new review, or to edit existing review if one already posted %>
-<% if user_or_guest.owns?(guide) %>
+<% if guide.owned_by?(user_or_guest) %>
   <% unless current_user.reviewed?(guide) %>
     |<%= link_to("Review", new_guide_review_path(guide_id: guide.id)) %>
   <% else %>

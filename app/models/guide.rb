@@ -60,6 +60,11 @@ class Guide < ApplicationRecord
     return user.username
   end
 
+  # Returns true if the guide was authored by the given user
+  def authored_by?(user_obj)
+    return user == user_obj
+  end
+
   # Returns true if guide has been purchased by any user
   def has_owners?
     return owners.exists?

@@ -2,7 +2,7 @@
 <div class="container <%= "bg-light" if @guide.discarded? %>">
   <h1><%= @guide.title %></h1>
     <%# Display if current user already owns the guide. Otherwise, display its price. %>
-  <% if user_or_guest.owns?(@guide) %>
+  <% if @guide.owned_by?(user_or_guest) %>
     <h4 class="text-muted">Owned</h4>
   <% else %>
     <h4 class="text-muted"><%= display_price(@guide) %></h4>
@@ -11,7 +11,7 @@
   <h5 class="text-muted">Created by: <%= display_author(@guide) %></h5>
   <h5 class="card-subtitle mb-2 text-muted">Rating: <%= display_rating(@guide.rating) %></h5>
   <%# If user is the author, display how many others have purchased the guide %>
-  <% if user_or_guest.author?(@guide) %>
+  <% if @guide.authored_by?(user_or_guest) %>
     <p class="text-muted"><%= display_owners_count(@guide) %></p>
   <% end %>
   <%# Display tags and description %>

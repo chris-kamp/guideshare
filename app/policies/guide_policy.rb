@@ -1,12 +1,12 @@
 class GuidePolicy < ApplicationPolicy
   # Guide must not have been discarded (with "discard" gem), or else user must own it
   def show?
-    record.kept? || (user.owns?(record) || user.author?(record))
+    record.kept? || (record.owned_by?(user) || record.authored_by?(user))
   end
 
   # User must be signed in and own a guide (or be its author) to view it
   def view?
-    user.owns?(record) || user.author?(record)
+    record.owned_by?(user) || record.authored_by?(user)
   end
 
   def edit?
@@ -14,12 +14,12 @@ class GuidePolicy < ApplicationPolicy
   end
 
   def update?
-    user.author?(record)
+    record.authored_by?(user)
   end
 
   # Only the author of a guide can destroy, archive or restore from archive
   def destroy?
-    user.author?(record)
+    record.authored_by?(user)
   end
 
   # Guide cannot be archived if already archived

@@ -8,7 +8,7 @@ module ApplicationHelper
   # Used to display a guide's author's username, appending "(you)" if current user is author
   def display_author(guide)
     name = guide.user.username
-    return user_or_guest.author?(guide) ? "#{name} (you)" : name
+    return guide.authored_by?(user_or_guest) ? "#{name} (you)" : name
   end
 
   # Used to display a list of a guide's tags in a comma-separated format
