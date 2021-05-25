@@ -1,14 +1,19 @@
 <div class="container">
-  <h1><%= @guide.title %></h1>
-  <hr>
+  <h1 class="text-center mb-4 mt-3">Guide Viewer</h1>
 
-<div id="guideCarousel" class="carousel slide carousel-dark" data-bs-ride="carousel" data-bs-interval="false" data-bs-wrap="false">
-  <div class="carousel-inner">
-    <%# For each page in the guide pdf, display image of page in the carousel %>
-    <% for page_num in (1..@page_count) do %>
-      <%= render partial: "carousel_img", locals: { page_num: page_num } %>
-    <% end %>
+  <div class="container rounded border p-2 mb-4">
+    <div id="guideCarousel" class="carousel slide carousel-dark" data-bs-ride="carousel" data-bs-interval="false" data-bs-wrap="false">
+      <h3 class="mb-4 text-center"><%= link_to @guide.title, guide_path(@guide) %></h3>
+      <h4 class="mb-4 text-center">By <%= @author.username %></h3>
+      <div class="carousel-inner">
+        <%# For each page in the guide pdf, display image of page in the carousel %>
+        <% for page_num in (1..@page_count) do %>
+          <%= render partial: "carousel_img", locals: { page_num: page_num } %>
+        <% end %>
+      </div>
+      <%= render "carousel_controls" %>
+    </div>
   </div>
-  <%= render "carousel_controls" %>
+  <p><%= link_to "Back to guide", guide_path(@guide), class: "btn btn-primary" %></p>
 </div>
 

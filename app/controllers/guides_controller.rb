@@ -62,7 +62,8 @@ class GuidesController < ApplicationController
   def view
     # Check if user is authorized to view the guide. If not, redirect with an alert message.
     authorize_guide(@guide, 'You must purchase this guide in order to view it')
-
+    # Retrieve the user who created the guide, used to display the author's name in the view
+    @author = @guide.user
     # Get number of pages in guide file for display. Makes a Cloudinary API call.
     @page_count = @guide.get_page_count
   end

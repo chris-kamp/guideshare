@@ -4,8 +4,17 @@
     <div class="row">
       <h4 class="mb-4">Guides you own</h4>
     </div>
-    <div class="row">
-      <%= render partial: "guides", locals: { guides: @guides } %>
-    </div>
+    <% if @guides.present? %>
+      <div class="row">
+        <%= render partial: "guides", locals: { guides: @guides } %>
+      </div>
+    <% else %>
+      <div class="row">
+        <p>You haven't added any guides to your library yet!</p>
+      </div>
+      <div class="row">
+        <%= link_to "Browse all guides", guides_path, class: "ms-auto w-auto btn btn-primary" %>
+      </div>
+    <% end %>
   </div>
 </div>
