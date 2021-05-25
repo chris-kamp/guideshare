@@ -76,6 +76,10 @@ class Guide < ApplicationRecord
           joins(:cart_guides).where('cart_guides.cart_id = ?', cart.id)
         }
 
+  # Selects the most recently-published guides, up to a limit of num_items. First orders Guides in descending order of
+  # creation date, and limits the number of results to the value of num_items.
+  scope :recent, ->(num_items) { order(created_at: :desc).limit(num_items) }
+
   # Get the number of pages in the attached PDF via a Cloudinary API call.
   def get_page_count
     Cloudinary::Api.resource(guide_file.key, pages: true)['pages'].to_i

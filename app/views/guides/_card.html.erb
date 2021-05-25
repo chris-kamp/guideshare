@@ -1,5 +1,5 @@
 <%# Shade background if guide is archived %>
-<div class="card mb-3 ms-1 me-1 <%= "bg-light" if guide.discarded? %>" style="width: 18rem;">
+<div class="card mb-3 ms-1 me-1 flex-grow-1 <%= "bg-light" if guide.discarded? %>" style="width: 18rem;">
   <div class="card-body">
     <h4 class="card-title"><%= link_to guide.title, guide %></h4>
     <%# Display if current user already owns the guide. Otherwise, display its price. %>
@@ -19,6 +19,6 @@
     <p class="text-muted">Tags: <%= display_guide_tags(guide) %></p>
     <p class="card-text"><%= description_text(guide) %></p>
     <%# Render links to view/modify guide %>
-    <%= render partial: "links", locals: {guide: guide} %>
+    <%= render partial: "guides/links", locals: {guide: guide} %>
   </div>
 </div>

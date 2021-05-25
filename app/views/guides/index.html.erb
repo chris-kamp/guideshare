@@ -1,5 +1,5 @@
 <div class="container">
   <h1 class="mb-5">Guides</h1>
-  <%= render "search"%>
-  <%= render "guides" %>
+  <%= render "search" %>
+  <%= render partial: "guides", locals: { guides: @guides } %>
 </div>

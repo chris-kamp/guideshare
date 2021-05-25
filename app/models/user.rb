@@ -32,4 +32,14 @@ class User < ApplicationRecord
   def in_cart?(guide)
     return cart.guides.exists?(guide.id)
   end
+
+  # Returns true if the user has any guides in their library
+  def owns_guides?
+    return owned_guides.present?
+  end
+
+  # Returns true if the user has created any guides
+  def published_any_guides?
+    return guides.present?
+  end
 end

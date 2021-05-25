@@ -3,5 +3,5 @@
   <p class="mb-5">Here, you can create new guides and view or edit the guides you have created. You can also delete or archive guides. Archived guides will remain accessible to you and to users who have already purchased them, but their listings will not be available for viewing or purchase by other users. If one or more users have already purchased a guide you created, you will only be able to archive it, not delete it.</p>
   <p><%= link_to "New guide", new_guide_path %></p>
 
-  <%= render "guides" %>
+  <%= render partial: "guides", locals: { guides: @guides } %>
 </div>

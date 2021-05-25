@@ -1,5 +1,64 @@
-<h1>Home</h1>
-<p>Welcome to guideshare</p>
-<p>
-
-</p>
+<div class="container mb-4">
+  <h1 class="text-center mb-4">GuideShare</h1>
+  <%# Login and registration %>
+  <% unless user_signed_in? %>
+    <div class="container border p-4 mb-4 rounded">
+      <div class="row">
+        <h4 class="text-center"><%= link_to "Sign In", new_user_session_path %> or <%= link_to "Sign Up", new_user_registration_path %> to start adding Guides to your library (or publish your own!)</h4>
+      </div>
+    </div>
+  <% end %>
+  <%# Recent guides %>
+  <div class="container border p-4 mb-4 rounded">
+    <div class="row">
+      <h4 class="mb-4">Recent Guides that might interest you</h4>
+    </div>
+    <div class="row">
+      <%= render partial: "guides/guides", locals: { guides: @recent_guides } %>
+    </div>
+    <div class="row">
+      <%= link_to "Browse all guides", guides_path, class: "ms-auto w-auto btn btn-primary" %>
+    </div>
+  </div>
+  <%# User's owned guides %>
+  <% if user_signed_in? %>
+    <div class="container border p-4 mb-4 rounded">
+        <div class="row">
+          <h4 class="mb-4">Guides you own</h4>
+        </div>
+      <% if user_or_guest.owns_guides? %>
+        <div class="row">
+          <%= render partial: "guides/guides", locals: { guides: @owned_guides } %>
+        </div>
+        <div class="row">
+          <%= link_to "My library", owned_guides_path, class: "ms-auto w-auto btn btn-primary" %>
+        </div>
+      <% else %>
+        <div class="row">
+          <p>You haven't added any guides to your library yet!</p>
+        </div>
+        <div class="row">
+          <%= link_to "Browse all guides", guides_path, class: "ms-auto w-auto btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+    <%# User's published guides %>
+    <div class="container border p-4 rounded">
+        <div class="row">
+          <h4 class="mb-4">Guides you have published</h4>
+        </div>
+      <% if user_or_guest.published_any_guides? %>
+        <div class="row">
+          <%= render partial: "guides/guides", locals: { guides: @published_guides } %>
+        </div>
+      <% else %>
+        <div class="row">
+          <p>You haven't published any guides yet!</p>
+        </div>
+      <% end %>
+        <div class="row">
+          <%= link_to "Author Dashboard", guides_dashboard_path, class: "ms-auto w-auto btn btn-primary" %>
+        </div>
+    </div>
+  <% end %>
+</div>
