@@ -1,2 +1,7 @@
 @import "bootstrap";
-@import "guides";
+
+@include media-breakpoint-up(lg) { 
+  .card {
+    max-width: 50%;
+  }
+ }

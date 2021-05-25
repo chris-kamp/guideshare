@@ -1,17 +1,23 @@
-<h1><%= @cart.user_name %>'s Shopping Cart</h1>
-<%# Display partial for each item in the cart, in an ordered list %>
-<ol>
-  <% @cart_guides.each do |cart_guide| %>
-    <%= render partial: "cart_guide", locals: {cart_guide: cart_guide} %>
-  <% end %>
-<ol>
-<%# Display cart total %>
-<p>TOTAL: <%= @cart.total %></p>
-<p>
-  <%# Render stripe checkout and clear cart buttons if cart is not empty %>
-  <%= render "buttons" unless @cart_guides.empty? %>
-  <%# Back link using custom link_back helper %>
-  <%= link_back(guides_path) %>
-</p>
-<%# Include Stripe script tags if cart is not empty (in which case checkout button will be present) %>
-<%= render partial: "shared/stripe", locals: { guide_ids: @guide_ids } unless @cart_guides.empty? %>
+<div class="container mb-4">
+  <h1 class="text-center mb-4 mt-3"><%= @cart.user_name %>'s Shopping Cart</h1>
+  <div class="container border p-4 mb-4 rounded">
+    <div class="row"><h4>Guides in cart</h4></div>
+    <%# Display partial for each item in the cart, in an ordered list %>
+    <ol class="list-group list-group-numbered">
+      <% @cart_guides.each do |cart_guide| %>
+        <%= render partial: "cart_guide", locals: {cart_guide: cart_guide} %>
+      <% end %>
+    <ol>
+    <hr>
+    <p class="text-end fs-4 fw-bold me-5">TOTAL: <%= number_to_currency(@cart.total, locale: :en) %></p>
+    <div class="d-flex justify-content-end"><%= button_to "Clear Cart", clear_cart_path, method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-danger rounded me-5" %></div>
+    <p>
+      <%# Render stripe checkout and clear cart buttons if cart is not empty %>
+      <%= render "buttons" unless @cart_guides.empty? %>
+      <%# Back link using custom link_back helper %>
+      <br>
+    </p>
+    <%# Include Stripe script tags if cart is not empty (in which case checkout button will be present) %>
+    <%= render partial: "shared/stripe", locals: { guide_ids: @guide_ids } unless @cart_guides.empty? %>
+  </div>
+</div>

@@ -1,7 +1,23 @@
 <div class="container">
-  <h1 class="mb-5">Author Dashboard</h1>
-  <p class="mb-5">Here, you can create new guides and view or edit the guides you have created. You can also delete or archive guides. Archived guides will remain accessible to you and to users who have already purchased them, but their listings will not be available for viewing or purchase by other users. If one or more users have already purchased a guide you created, you will only be able to archive it, not delete it.</p>
-  <p><%= link_to "New guide", new_guide_path %></p>
-
-  <%= render partial: "guides", locals: { guides: @guides } %>
+  <h1 class="mb-4 mt-3 text-center">Author Dashboard</h1>
+  <div class="container p-4 mb-4 rounded m-auto" style="width: 12rem;">
+    <div class="row">
+      <%= link_to "Create a guide", new_guide_path, class: "btn btn-primary m-auto w-auto p-3" %>
+    </div>
+  </div>
+  <%# User's published guides %>
+  <div class="container border p-4 rounded mb-4">
+      <div class="row">
+        <h4 class="mb-4">Guides you have published</h4>
+      </div>
+    <% if user_or_guest.published_any_guides? %>
+      <div class="row">
+        <%= render partial: "guides/guides", locals: { guides: @guides } %>
+      </div>
+    <% else %>
+      <div class="row">
+        <p>You haven't published any guides yet!</p>
+      </div>
+    <% end %>
+  </div>
 </div>

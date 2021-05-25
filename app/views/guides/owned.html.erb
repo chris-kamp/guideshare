@@ -1,4 +1,11 @@
 <div class="container">
-  <h1 class="mb-5">My Guides</h1>
-  <%= render partial: "guides", locals: { guides: @guides } %>
+  <h1 class="mb-4 mt-3 text-center">My Library</h1>
+  <div class="container border p-4 mb-4 rounded">
+    <div class="row">
+      <h4 class="mb-4">Guides you own</h4>
+    </div>
+    <div class="row">
+      <%= render partial: "guides", locals: { guides: @guides } %>
+    </div>
+  </div>
 </div>

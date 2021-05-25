@@ -1,35 +1,37 @@
 <%# Provide link to read guide, if user is authorised to do so %>
 <% if policy(guide).view? %>
-  <%= link_to "Read Now", view_guide_path(guide), class: "card-link" %>
+  <%= link_to "Read Now", view_guide_path(guide), class: "btn btn-primary mt-2" %>
 <% end %>
 <%# If user owns the guide, provide link to post a new review, or to edit existing review if one already posted %>
 <% if guide.owned_by?(user_or_guest) %>
   <% unless current_user.reviewed?(guide) %>
-    |<%= link_to("Review", new_guide_review_path(guide_id: guide.id)) %>
+    <%= link_to("Review", new_guide_review_path(guide_id: guide.id), class: "btn btn-primary mt-2") %>
   <% else %>
-    |<%= link_to("Edit Review", edit_review_path(current_user.review(guide))) %>
+    <%= link_to("Edit Review", edit_review_path(current_user.review(guide)), class: "btn btn-primary mt-2") %>
   <% end %>
 <% end %>
 <%# Provide link to edit guide if user is authorised to do so %>
 <% if policy(guide).edit? %>
-  <%= link_to "Edit", edit_guide_path(guide), class: "card-link" %>
+  <%= link_to "Edit", edit_guide_path(guide), class: "btn btn-primary mt-2" %>
 <% end %>
 <%# Provide button to delete guide if user is authorised to do so %>
-<% if policy(guide).destroy? %>
-  <%# Delete button is disabled with an explanatory tooltip if the guide has already been purchased by one or more users %>
-  <% if guide.has_owners? %>
-    <div class="d-inline-block" data-toggle="tooltip" data-placement="bottom" title="Guides that have been purchased by users can only be archived, not deleted.">
-      <%= button_to "Delete", guide_path(guide), method: :delete, class: "btn btn-secondary disabled" %>
-    </div>
-  <%# Otherwise, delete button is active and has a confirmation prompt %>
-  <% else %>
-    <%= button_to "Delete", guide_path(guide), method: :delete, class: "btn btn-secondary", data: {confirm: "Are you sure?"} %>
+<div class="button-group">
+  <% if policy(guide).destroy? %>
+    <%# Delete button is disabled with an explanatory tooltip if the guide has already been purchased by one or more users %>
+    <% if guide.has_owners? %>
+      <div class="d-inline-block" data-toggle="tooltip" data-placement="bottom" title="Guides that have been purchased by users can only be archived, not deleted.">
+        <%= button_to "Delete", guide_path(guide), method: :delete, class: "btn btn-danger disabled d-inline-block w-auto" %>
+      </div>
+    <%# Otherwise, delete button is active and has a confirmation prompt %>
+    <% else %>
+      <%= button_to "Delete", guide_path(guide), method: :delete, class: "btn btn-danger mt-2", data: {confirm: "Are you sure?"}, form: {class: "d-inline-block"} %>
+    <% end %>
   <% end %>
-<% end %>
-<%# Provide button to archive guide if user is authorised to do so %>
-<% if policy(guide).archive? %>
-  <%= button_to "Archive", archive_guide_path(guide), method: :get, class: "btn btn-secondary", data: {confirm: "Are you sure?"} %>
-<%# Provide button to restore archived guide if user is authorised to do so %>
-<% elsif policy(guide).restore? %>
-  <%= button_to "Restore", restore_guide_path(guide), method: :get, class: "btn btn-secondary", data: {confirm: "Are you sure?"} %>
-<% end %>
+  <%# Provide button to archive guide if user is authorised to do so %>
+  <% if policy(guide).archive? %>
+    <%= button_to "Archive", archive_guide_path(guide), method: :get, class: "btn btn-warning mt-2", data: {confirm: "Are you sure?"}, form: {class: "d-inline-block"} %>
+  <%# Provide button to restore archived guide if user is authorised to do so %>
+  <% elsif policy(guide).restore? %>
+    <%= button_to "Restore", restore_guide_path(guide), method: :get, class: "btn btn-warning d-inline-block", data: {confirm: "Are you sure?"}, form: {class: "d-inline-block"} %>
+  <% end %>
+</div>

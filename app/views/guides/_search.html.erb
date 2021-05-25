@@ -1,4 +1,7 @@
-<div class="container mb-5 p-3 border">
+<div class="container mb-5 p-3 rounded border">
+  <div class="row">
+    <h4>Search</h4>
+  </div>
   <%= simple_form_for :search, url: guides_path, method: "GET", html: { class: 'form-inline' } do |f| %>
     <%= f.input :query, input_html: {value: ""}, label: "Search by title", required: false %>
     <%= f.input :tags, as: :check_boxes, collection: @tags, label_method: :name, value_method: :id, input_html: {value: ""}, label: "Select tags", required: false, wrapper: :horizontal_collection_inline %>

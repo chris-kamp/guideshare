@@ -10,10 +10,10 @@ class GuidesController < ApplicationController
     # Retrieve all Tags, used in checkboxes in search form partial
     @tags = Tag.all
 
-    # Retrieve only guides which are "kept" (ie. have not been archived using the Discard gem).
-    # Used "includes" to eager load user, tags and guide_tags associations, whose attributes are displayed in the view,
-    # to avoid unnecessary "N+1" queries.
-    @guides = Guide.includes(%i[user tags guide_tags]).kept
+    # Retrieve only guides which are "kept" (ie. have not been archived using the Discard gem) and not created by
+    # the current user. Use "includes" to eager load user, tags and guide_tags associations, whose attributes are
+    # displayed in the view, to avoid unnecessary "N+1" queries.
+    @guides = Guide.includes(%i[user tags guide_tags]).kept.not_published_by(current_user)
 
     # If no search params are present, return (and implicitly render the view). Code below executes only if
     # search params are present.

@@ -1,2 +1,4 @@
-<button id="checkout-button">Check Out</button> | 
-<%= button_to "Clear Cart", clear_cart_path, method: :delete, data: {confirm: "Are you sure?"} %>
+<div class="btn-group" role="group" aria-label="Basic example">
+  <button type="button" class="btn btn-primary me-2 rounded" id="checkout-button">Check Out</button>
+  <%= link_back(guides_path, classes="btn btn-secondary rounded me-2") %>
+</div>

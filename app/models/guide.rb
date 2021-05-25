@@ -69,6 +69,9 @@ class Guide < ApplicationRecord
   # Selects guides published by a given user
   scope :published_by, ->(user) { where(user: user) }
 
+  # Selects guides NOT published by a given user
+  scope :not_published_by, ->(user) { where.not(user: user) }
+
   # Selects guides in a given shopping cart, by performing an inner join between Guides and CartGuides and selecting
   # those entries from the join table where the cart_id of the CartGuide is equal to the id of the given cart
   scope :in_cart,

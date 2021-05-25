@@ -1,5 +1,18 @@
 <div class="container">
   <h1 class="mb-5">Guides</h1>
   <%= render "search" %>
-  <%= render partial: "guides", locals: { guides: @guides } %>
+  <div class="container border p-4 rounded mb-4">
+    <div class="row">
+        <h4 class="mb-4">Guides</h4>
+      </div>
+    <% unless @guides.empty? %>
+      <div class="row">
+        <%= render partial: "guides/guides", locals: { guides: @guides } %>
+      </div>
+    <% else %>
+      <div class="row">
+        <p>No guides have been published, or no guides match your search criteria.</p>
+      </div>
+    <% end %>
+  </div>
 </div>

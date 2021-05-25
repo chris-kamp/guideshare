@@ -22,11 +22,11 @@
       fetch('/guides/checkout', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           'guide_ids': '<%= guide_ids %>',
-        })
+        }),
       })
       .then(function(response) {
         return response.json();

@@ -1,10 +1,10 @@
 <div class="container mb-4">
-  <h1 class="text-center mb-4">GuideShare</h1>
+  <h1 class="text-center mb-4 mt-3">GuideShare</h1>
   <%# Login and registration %>
   <% unless user_signed_in? %>
     <div class="container border p-4 mb-4 rounded">
       <div class="row">
-        <h4 class="text-center"><%= link_to "Sign In", new_user_session_path %> or <%= link_to "Sign Up", new_user_registration_path %> to start adding Guides to your library (or publish your own!)</h4>
+        <h4 class="text-center"><%= link_to "Log In", new_user_session_path %> or <%= link_to "Sign Up", new_user_registration_path %> to start adding Guides to your library (or publish your own)!</h4>
       </div>
     </div>
   <% end %>
