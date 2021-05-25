@@ -1,7 +1,12 @@
 <%# Shade background if guide is archived %>
-<div class="card mb-3 ms-1 me-1 flex-grow-1 <%= "bg-light" if guide.discarded? %>" style="width: 18rem;">
+<div class="card mb-3 ms-1 me-1 flex-grow-1 <%= "archived" if guide.discarded? %>" style="width: 18rem;">
   <div class="card-body">
-    <h4 class="card-title"><%= link_to guide.title, guide %></h4>
+    <h4 class="card-title">
+      <%= link_to guide.title, guide %>
+      <% if guide.discarded? %>
+        <span class="text-muted fs-4"> (Archived)</span>
+      <% end %>
+    </h4>
     <%# Display if current user already owns the guide. Otherwise, display its price. %>
     <% if guide.owned_by?(user_or_guest) %>
       <h5 class="card-subtitle mb-2 text-muted">Owned</h5>
@@ -17,8 +22,8 @@
     <% end %>
     <%# Display tags and description %>
     <p class="text-muted">Tags: <%= display_guide_tags(guide) %></p>
-    <p class="card-text"><%= description_text(guide) %></p>
-    <%# Render links to view/modify guide %>
+    <p class="card-text"><%= truncate(description_text(guide), length: 250) %></p>
+    <%# Render links to view/modify guide. Use full path, as this partial is sometimes used from outside the Guides view folder. %>
     <%= render partial: "guides/links", locals: {guide: guide} %>
   </div>
 </div>

@@ -32,6 +32,6 @@
     <%= button_to "Archive", archive_guide_path(guide), method: :get, class: "btn btn-warning mt-2", data: {confirm: "Are you sure?"}, form: {class: "d-inline-block"} %>
   <%# Provide button to restore archived guide if user is authorised to do so %>
   <% elsif policy(guide).restore? %>
-    <%= button_to "Restore", restore_guide_path(guide), method: :get, class: "btn btn-warning d-inline-block", data: {confirm: "Are you sure?"}, form: {class: "d-inline-block"} %>
+    <%= button_to "Restore", restore_guide_path(guide), method: :get, class: "btn btn-warning mt-2", data: {confirm: "Are you sure?"}, form: {class: "d-inline-block"} %>
   <% end %>
 </div>

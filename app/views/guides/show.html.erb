@@ -1,8 +1,8 @@
 <%# Shade background if guide is archived %>
-<div class="container <%= "bg-light" if @guide.discarded? %>">
-  <h1 class="text-center mb-4 mt-3"><%= @guide.title %></h1>
+<div class="container">
+  <h1 class="text-center mb-4 mt-3"><%= @guide.title %><%= " (Archived)" if @guide.discarded? %></h1>
     <%# Display if current user already owns the guide. Otherwise, display its price. %>
-  <div class="container rounded border mb-4 p-4">
+  <div class="container rounded border mb-4 p-4 <%= "archived" if @guide.discarded? %>">
     <h4 class="mb-4">Details</h4>
     <% if @guide.owned_by?(user_or_guest) %>
       <h4 class="text-muted">Owned</h4>

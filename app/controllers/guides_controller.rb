@@ -122,13 +122,13 @@ class GuidesController < ApplicationController
     # If any users have already purchased the guide, redirect to the Guides index page and notify user
     # that the guide cannot be deleted, only archived.
     if @guide.has_owners?
-      redirect_to guides_url,
+      redirect_to guides_path,
                   alert:
                     'Guide could not be deleted because it has been purchased by one or more users. Try archiving it instead.'
     # Otherwise, allow guide to be deleted, redirect to Guides index and notify success.
     else
       @guide.destroy
-      redirect_to guides_url, notice: 'Guide listing was successfully deleted.'
+      redirect_to guides_path, notice: 'Guide listing was successfully deleted.'
     end
   end
 
@@ -144,7 +144,7 @@ class GuidesController < ApplicationController
 
     # Dependents are not destroyed when discarding, so manually remove discarded guides from all users' shopping carts
     CartGuide.for_guide(@guide).destroy_all
-    redirect_to guides_url,
+    redirect_to guide_path(@guide),
                 notice:
                   'Guide listing was successfully archived. NOTE: Any users who already purchased the guide will retain access to it.'
   end
@@ -160,7 +160,7 @@ class GuidesController < ApplicationController
 
     # Restore archived guide by "undiscarding" with Discard gem method, making it accessible to all users again
     @guide.undiscard
-    redirect_to guide_url(@guide),
+    redirect_to guide_path(@guide),
                 notice: 'Guide listing was successfully restored.'
   end
 
