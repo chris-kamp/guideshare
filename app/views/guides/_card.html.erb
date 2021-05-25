@@ -9,7 +9,7 @@
       <h5 class="card-subtitle mb-2 text-muted"><%= display_price(guide) %></h5>
     <% end %>
     <%# Display author and rating %>
-    <h6 class="card-subtitle mb-2 text-muted">Created by: <%= display_author(guide) %></h6>
+    <h5 class="card-subtitle mb-2 text-muted">Created by: <%= display_author(guide) %></h5>
     <h5 class="card-subtitle mb-2 text-muted">Rating: <%= display_rating(guide.rating) %></h5>
     <%# If user is the author, display how many others have purchased the guide %>
     <% if guide.authored_by?(user_or_guest) %>

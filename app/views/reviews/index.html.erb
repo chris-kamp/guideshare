@@ -1,8 +1,11 @@
 <div class="container">
-  <h1 class="mb-5">Reviews for "<%= @guide.title %>"</h1>
-  <hr>
-  <% @reviews.each do |review| %>
-    <%= render partial: "review", locals: {review: review} %>
+  <h1 class="text-center mb-4 mt-3">Reviews for "<%= @guide.title %>"</h1>
+  <% if @reviews.present? %>
+    <% @reviews.each do |review| %>
+      <%= render partial: "review", locals: {review: review} %>
+    <% end %>
+  <% else %>
+    <p class="text-center fs-3">No reviews have been posted yet!</p>
   <% end %>
-  <p><%= link_to "Back to guide", guide_path(@guide) %></p>
+  <p><%= link_to "Back to guide", guide_path(@guide), class: "btn btn-primary" %></p>
 </div>

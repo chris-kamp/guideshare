@@ -1,2 +1,4 @@
-<h1>Review "<%= @guide.title %>"</h1>
-<%= render "form" %>
+<div class="container">
+  <h1 class="text-center mb-4 mt-3">Review "<%= @guide.title %>"</h1>
+  <%= render partial: "form", locals: { subheading: "New" } %>
+</div>

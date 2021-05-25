@@ -1,9 +1,11 @@
-<li class="list-group-item">
-  <p>By: <%= review.user_name %></p>
-  <p>Rating: <%= review.rating %> </p>
-  <p><%= review.content %> </p>
-  <%= link_to "Edit", edit_review_path(review) if policy(review).edit? %>
+<li class="list-group-item border rounded mb-2">
+  <div class="row"><span class="fw-bold fs-3"><%= review.user_name %></span></div>
+  <div class="row">
+    <span class="fw-bold fs-5">Rating: <%= review.rating %> / 5</span>
+    <p class="fst-italic"><%= review.content %></p>
+  </div>
+  <%= link_to "Edit", edit_review_path(review), class: "btn btn-primary d-inline-block" if policy(review).edit? %>
   <% if policy(review).destroy? %>
-    | <%= link_to "Delete", review_path(review), method: :delete, data: {confirm: "Are you sure?"} %>
+    <%= link_to "Delete", review_path(review), method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-danger d-inline-block" %>
   <% end %>
 </li>
