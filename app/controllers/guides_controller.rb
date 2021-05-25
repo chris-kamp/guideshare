@@ -2,8 +2,6 @@ class GuidesController < ApplicationController
   before_action :authenticate_user!, except: %i[index show checkout]
   before_action :set_guide,
                 only: %i[show edit update destroy view archive restore]
-  # Checkout is initiated by Stripe, so no authenticity token will be available
-  skip_before_action :verify_authenticity_token, only: [:checkout]
 
   # GET /guides
   def index

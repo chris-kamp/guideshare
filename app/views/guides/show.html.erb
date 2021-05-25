@@ -1,53 +1,60 @@
 <%# Shade background if guide is archived %>
 <div class="container <%= "bg-light" if @guide.discarded? %>">
-  <h1><%= @guide.title %></h1>
+  <h1 class="text-center mb-4 mt-3"><%= @guide.title %></h1>
     <%# Display if current user already owns the guide. Otherwise, display its price. %>
-  <% if @guide.owned_by?(user_or_guest) %>
-    <h4 class="text-muted">Owned</h4>
-  <% else %>
-    <h4 class="text-muted"><%= display_price(@guide) %></h4>
-  <% end %>
-  <%# Display author and rating %>
-  <h5 class="text-muted">Created by: <%= display_author(@guide) %></h5>
-  <h5 class="card-subtitle mb-2 text-muted">Rating: <%= display_rating(@guide.rating) %></h5>
-  <%# If user is the author, display how many others have purchased the guide %>
-  <% if @guide.authored_by?(user_or_guest) %>
-    <p class="text-muted"><%= display_owners_count(@guide) %></p>
-  <% end %>
-  <%# Display tags and description %>
-  <p class="text-muted">Tags: <%= display_guide_tags(@guide) %></p>
-  <hr>
-  <p><%= description_text(@guide) %></p>
-  <%# If guide not already viewable by user, display buttons to add to library, buy now and/or add to cart %>
-  <p>
-    <% unless policy(@guide).view? %>
-      <%# Render "Add to library" button if guide is free %>
-      <% if @guide.free? %>
-        <%= button_to "Add to Library", checkout_path, params: { free: true, guide_ids: [@guide.id] }, id: "add-to-lib" %>
-      <%# If guide is not free, add to cart and buy now buttons may be rendered %>
-      <% else %>
-        <%# Display Add To Cart if not already in cart %>
-        <% unless user_or_guest.in_cart?(@guide) %>
-          <%# Creates form with hidden fields for "CartGuide". Posts to cart_guides#create, effectively adding a guide to user's cart. %>
-          <%= button_to "Add to cart", cart_guides_path, params: { cart_guide: { cart_id: user_or_guest.cart.id, guide_id: @guide.id } } %> | 
-        <% end %>
-        <%# Display stripe checkout button %>
-        <button id="checkout-button">Buy Now</button>
-      <% end %>
+  <div class="container rounded border mb-4 p-4">
+    <h4 class="mb-4">Details</h4>
+    <% if @guide.owned_by?(user_or_guest) %>
+      <h4 class="text-muted">Owned</h4>
+    <% else %>
+      <h4 class="text-muted"><%= display_price(@guide) %></h4>
     <% end %>
-  </p>
-  <%# Render links to view/modify guide %>
-  <%= render partial: "links", locals: { guide: @guide } %>
+    <%# Display author and rating %>
+    <h5 class="text-muted">Created by: <%= display_author(@guide) %></h5>
+    <h5 class="card-subtitle mb-2 text-muted">Rating: <%= display_rating(@guide.rating) %></h5>
+    <%# If user is the author, display how many others have purchased the guide %>
+    <% if @guide.authored_by?(user_or_guest) %>
+      <p class="text-muted"><%= display_owners_count(@guide) %></p>
+    <% end %>
+    <%# Display tags and description %>
+    <p class="text-muted">Tags: <%= display_guide_tags(@guide) %></p>
+    <hr>
+    <p><%= description_text(@guide) %></p>
+    <%# If guide not already viewable by user, display buttons to add to library, buy now and/or add to cart %>
+    <p>
+      <% unless policy(@guide).view? %>
+        <%# Render "Add to library" button if guide is free %>
+        <% if @guide.free? %>
+          <%= button_to "Add to Library", checkout_path, params: { free: true, guide_ids: [@guide.id] }, id: "add-to-lib", class: "btn btn-primary" %>
+        <%# If guide is not free, add to cart and buy now buttons may be rendered %>
+        <% else %>
+          <%# Display Add To Cart if not already in cart %>
+          <% unless user_or_guest.in_cart?(@guide) %>
+            <%# Creates form with hidden fields for "CartGuide". Posts to cart_guides#create, effectively adding a guide to user's cart. %>
+            <%= button_to "Add to cart", cart_guides_path, params: { cart_guide: { cart_id: user_or_guest.cart.id, guide_id: @guide.id } } %> |
+          <% end %>
+          <%# Display stripe checkout button %>
+          <button id="checkout-button" class="btn btn-primary">Buy Now</button>
+        <% end %>
+      <% end %>
+    </p>
+    <%# Render links to view/modify guide %>
+    <%= render partial: "links", locals: { guide: @guide } %>
+  </div>
   <%# Display reviews for the guide %>
-  <h4>Reviews</h4>
-  <hr>
-  <% @reviews.each do |review| %>
-    <%= render partial: "reviews/review", locals: {review: review} %>
-  <% end %>
-  <p><%= link_to "See all reviews", guide_reviews_path(@guide) %></p>
-  <p><%= link_to "Back to guides", guides_path %></p>
+  <div class="container border rounded mb-4 p-4">
+    <h4>Recent Reviews</h4>
+    <hr>
+    <ul class="list-group">
+      <% @reviews.each do |review| %>
+        <%= render partial: "reviews/review", locals: {review: review} %>
+      <% end %>
+    </ul>
+    <%= link_to "See all reviews", guide_reviews_path(@guide), class: "btn btn-primary d-inline-block", form: {class: "d-inline-block"} %>
+    <%= link_to "Back to guides", guides_path, class: "btn btn-primary d-inline-block", form: {class: "d-inline-block"} %>
+    <%# Include Stripe script tags if guide is not viewable or free (in which case Buy Now button will be present) %>
+    <%= render(partial: "shared/stripe", locals: {guide_ids: [@guide.id]}) unless (policy(@guide).view? || @guide.free?) %>
+    <%# Include script which causes the "Add to Library" button to redirect to sign-in page if user is not signed in %>
+    <%= render "add_to_lib_script" %>
+  </div>
 </div>
-<%# Include Stripe script tags if guide is not viewable or free (in which case Buy Now button will be present) %>
-<%= render(partial: "shared/stripe", locals: {guide_ids: [@guide.id]}) unless (policy(@guide).view? || @guide.free?) %>
-<%# Include script which causes the "Add to Library" button to redirect to sign-in page if user is not signed in %>
-<%= render "add_to_lib_script" %>

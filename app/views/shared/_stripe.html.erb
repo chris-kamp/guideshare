@@ -17,12 +17,15 @@
         <% session["user_return_to"] = request.url %>
         location = "<%= new_user_session_path %>"
       <% end %>
+      // Get CSRF token from meta tag
+      const csrfToken = document.querySelector("[name='csrf-token']").content
       // Create a new Checkout Session using the server-side endpoint
       // Post guide ids for use as line items with the request
       fetch('/guides/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          "X-CSRF-Token": csrfToken,
         },
         body: JSON.stringify({
           'guide_ids': '<%= guide_ids %>',
