@@ -20,7 +20,7 @@
     <%# Delete button is disabled with an explanatory tooltip if the guide has already been purchased by one or more users %>
     <% if guide.has_owners? %>
       <div class="d-inline-block" data-toggle="tooltip" data-placement="bottom" title="Guides that have been purchased by users can only be archived, not deleted.">
-        <%= button_to "Delete", guide_path(guide), method: :delete, class: "btn btn-danger disabled d-inline-block w-auto" %>
+        <%= button_to "Delete", guide_path(guide), method: :delete, class: "btn btn-danger disabled d-inline-block w-auto mt-2" %>
       </div>
     <%# Otherwise, delete button is active and has a confirmation prompt %>
     <% else %>
