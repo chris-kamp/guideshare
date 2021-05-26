@@ -72,13 +72,6 @@ class Guide < ApplicationRecord
   # Selects guides NOT published by a given user
   scope :not_published_by, ->(user) { where.not(user: user) }
 
-  # Selects guides in a given shopping cart, by performing an inner join between Guides and CartGuides and selecting
-  # those entries from the join table where the cart_id of the CartGuide is equal to the id of the given cart
-  scope :in_cart,
-        ->(cart) {
-          joins(:cart_guides).where('cart_guides.cart_id = ?', cart.id)
-        }
-
   # Selects the most recently-published guides, up to a limit of num_items. First orders Guides in descending order of
   # creation date, and limits the number of results to the value of num_items.
   scope :recent, ->(num_items) { order(created_at: :desc).limit(num_items) }
