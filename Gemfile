@@ -80,7 +80,6 @@ gem "active_storage_validations", "~> 0.9.3"
 gem "stripe", "~> 5.32"
 
 # User roles
-gem "rolify", "~> 6.0"
 
 # Authorisation and policy scopes
 gem "pundit", "~> 2.1"
