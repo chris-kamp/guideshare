@@ -125,11 +125,8 @@ tags = Tag.create([
   },
 ])
 
-# To avoid excessive Cloudinary requests during testing, load one attachment and replicate for other seeded guides.
-guide_attachment =
-  URI.open(
-    ENV['SAMPLE_PDF_FILE_LONG'],
-  )
+# To avoid excessive Cloudinary requests, when seeding, load one attachment and replicate for other seeded guides.
+guide_attachment = File.open(File.join(Rails.root, 'app/assets/documents/lorem.pdf'))
 
 guide_template =
   user.guides.create(
