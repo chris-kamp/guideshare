@@ -16,7 +16,7 @@
       <%= f.input :price, label: "Price ($)", hint: "Enter 0 if the guide should be free", wrapper_html: {class: "mb-5"}, input_html: {step: 0.01} %>
       <%# Create checkboxes for each tag in @guide.tags %>
       <%= f.association :tags, as: :check_boxes, wrapper_html: {class: "mb-5"} %>
-      <%= f.input :guide_file, wrapper_html: {class: "mb-5"}, hint: (subheading == "Edit" ? "Leave empty if you don't want to replace the guide file" : "") %>
+      <%= f.input :guide_file, label: "Guide file (PDF)", wrapper_html: {class: "mb-5"}, hint: (subheading == "Edit" ? "Leave empty if you don't want to replace the guide file" : "") %>
     </div>
   
     <div class="form-actions">
