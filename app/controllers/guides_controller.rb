@@ -9,15 +9,19 @@ class GuidesController < ApplicationController
     @tags = Tag.all
 
     # Retrieve only guides which are "kept" (ie. have not been archived using the Discard gem) and not created by
-    # the current user. Use "includes" to eager load user, tags and guide_tags associations, whose attributes are
-    # displayed in the view, to avoid unnecessary "N+1" queries.
-    @guides = Guide.includes(%i[user tags guide_tags]).kept.not_published_by(current_user)
+    # the current user. Eager load user, tags and guide_tags associations, to avoid unnecessary "N+1" queries in the view.
+    # Use ".includes" if possible, but use ".preload" instead if filtering for guides that match all selected tags (because
+    # .includes causes a grouping error if used with the queries in the "Guide.has_all_tags" scope)
+    @guides =
+      if params[:search].present? && params[:search][:tags_match].to_i == 1
+        Guide.kept.not_published_by(current_user).preload(%i[user tags guide_tags])
+      else
+        Guide.kept.not_published_by(current_user).includes(%i[user tags guide_tags])
+      end
 
-    # If no search params are present, return (and implicitly render the view). Code below executes only if
-    # search params are present.
+    # If no search params are present, return and render the view. Code below executes only if search params are present.
     return unless params[:search].present?
 
-    # If search params exist:
     # Store the searchbar query
     @query = params[:search][:query]
 
