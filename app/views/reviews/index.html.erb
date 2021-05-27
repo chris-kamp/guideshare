@@ -4,6 +4,7 @@
     <% @reviews.each do |review| %>
       <%= render partial: "review", locals: {review: review} %>
     <% end %>
+    <%= paginate @reviews%>
   <% else %>
     <p class="text-center fs-3">No reviews have been posted yet!</p>
   <% end %>

@@ -89,3 +89,5 @@ gem "discard", "~> 1.2"
 
 # Used in development to help identify N+1 queries where eager loading may be necessary
 gem 'bullet', group: 'development'
+
+gem "kaminari", "~> 1.2"

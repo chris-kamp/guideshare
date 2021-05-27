@@ -8,6 +8,7 @@
       <div class="row">
         <%= render partial: "guides", locals: { guides: @guides } %>
       </div>
+      <%= paginate @guides %>
     <% else %>
       <div class="row">
         <p>You haven't added any guides to your library yet!</p>

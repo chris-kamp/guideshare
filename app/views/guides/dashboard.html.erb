@@ -14,6 +14,7 @@
       <div class="row">
         <%= render partial: "guides/guides", locals: { guides: @guides } %>
       </div>
+      <%= paginate @guides %>
     <% else %>
       <div class="row">
         <p>You haven't published any guides yet!</p>

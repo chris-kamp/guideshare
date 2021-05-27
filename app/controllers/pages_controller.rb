@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
   def home
     # Retrieve only guides which are "kept" (ie. have not been archived using the Discard gem) and which were not created
-    # by the current user, limited to the most recently-published 3 guides using Guide scope "recent".  
+    # by the current user, limited to the most recently-published 3 guides using Guide scope "recent".
     # Use "includes" to eager load tags and guide_tags associations, whose attributes are displayed in the view.
     @recent_guides = Guide.includes(:user, :tags, :guide_tags).kept.not_published_by(current_user).recent(3)
     # Retrieve only guides owned by the current user, limited to the 3 most recently published.  Use "includes" to eager

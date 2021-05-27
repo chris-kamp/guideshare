@@ -9,6 +9,7 @@
       <div class="row">
         <%= render partial: "guides/guides", locals: { guides: @guides } %>
       </div>
+      <%= paginate @guides %>
     <% else %>
       <div class="row">
         <p>No guides have been published, or no guides match your search criteria.</p>

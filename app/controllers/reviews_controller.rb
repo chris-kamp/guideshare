@@ -7,7 +7,7 @@ class ReviewsController < ApplicationController
   def index
     # Retrieve only those reviews belonging to the relevant guide for display.
     # Use "includes" to eager load the user to which the review belongs (ie. its author) for use in the view.
-    @reviews = @guide.reviews.includes(:user)
+    @reviews = @guide.reviews.page(params[:page]).includes(:user)
   end
 
   # GET /guides/:guide_id/reviews/new

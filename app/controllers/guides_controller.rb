@@ -13,23 +13,25 @@ class GuidesController < ApplicationController
     # displayed in the view, to avoid unnecessary "N+1" queries.
     @guides = Guide.includes(%i[user tags guide_tags]).kept.not_published_by(current_user)
 
-    # If no search params are present, return (and implicitly render the view). Code below executes only if
-    # search params are present.
-    return unless params[:search].present?
-
     # If search params exist:
-    # Store the searchbar query
-    @query = params[:search][:query]
+    if params[:search].present?
 
-    # Store array of tag IDs selected for filtering results. First remove empty strings (first element will be an
-    # empty string due to Rails query params parsing behaviour) and cast to integers.
-    @tag_ids = (params[:search][:tags] - ['']).map(&:to_i)
+      # Store the searchbar query
+      @query = params[:search][:query]
 
-    # Store the selection for tag filtering (whether to match any or all)
-    @tags_match = (params[:search][:tags_match]).to_i
+      # Store array of tag IDs selected for filtering results. First remove empty strings (first element will be an
+      # empty string due to Rails query params parsing behaviour) and cast to integers.
+      @tag_ids = (params[:search][:tags] - ['']).map(&:to_i)
 
-    # Filter guides based on search query, selected tags, and filter type
-    @guides = apply_search_filter(@guides, @query, @tag_ids, @tags_match)
+      # Store the selection for tag filtering (whether to match any or all)
+      @tags_match = (params[:search][:tags_match]).to_i
+
+      # Filter guides based on search query, selected tags, and filter type.
+      @guides = apply_search_filter(@guides, @query, @tag_ids, @tags_match)
+    end
+
+    # Paginate using Kaminari gem. Apply pagination last to avoid limiting search/filter results.
+    @guides = @guides.page params[:page]
   end
 
   # GET /guides/dashboard
@@ -37,8 +39,7 @@ class GuidesController < ApplicationController
     # Retrieve all guides of which the current user is the author, using "published_by" custom model scope.
     # Use "includes" to eager load user, guide_tags and tags associations whose attributes are used in the view,
     # to avoid unnecessary "N+1" queries.
-    @guides =
-      Guide.includes(:user, :guide_tags, :tags).published_by(current_user)
+    @guides = Guide.published_by(current_user).page(params[:page]).includes(:user, :guide_tags, :tags)
   end
 
   # GET /guides/:id
@@ -249,7 +250,8 @@ class GuidesController < ApplicationController
   def owned
     # Retrieve only guides owned by the current user. Use "includes" to eager load the user to which
     # the guide belongs and the guide's guide_tags and tags associations, which are used in the view.
-    @guides = current_user.owned_guides.includes(:user, :guide_tags, :tags)
+    # Paginate using Kaminari gem.
+    @guides = current_user.owned_guides.page(params[:page]).includes(:user, :guide_tags, :tags)
   end
 
   private
